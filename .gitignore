@@ -1,0 +1,13 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+node_modules/
+.next/
+*.tsbuildinfo
+postgres_data/
+/tmp/uploads
+*.swp
+.DS_Store

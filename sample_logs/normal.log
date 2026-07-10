@@ -1,0 +1,100 @@
+Mon Jul 06 09:05:13 2026|192.168.1.100|carol@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|607|47725|None|13
+Mon Jul 06 09:42:14 2026|192.168.1.101|alice@company.com|https://github.com/torvalds/linux|200|Allowed|General Surfing|CLEAN|GET|978|19017|None|14
+Mon Jul 06 09:47:17 2026|192.168.1.100|alice@company.com|https://www.google.com/search?q=flask+sqlalchemy+tutorial|200|Allowed|Web Search Engines|CLEAN|GET|1316|6497|None|13
+Mon Jul 06 09:55:07 2026|192.168.1.100|carol@company.com|https://www.google.com/search?q=flask+sqlalchemy+tutorial|200|Allowed|Web Search Engines|CLEAN|GET|1064|39886|None|2
+Mon Jul 06 09:55:21 2026|192.168.1.100|carol@company.com|https://github.com/torvalds/linux|200|Allowed|General Surfing|CLEAN|GET|1194|14840|None|4
+Mon Jul 06 10:24:06 2026|192.168.1.101|bob@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|288|48623|None|14
+Mon Jul 06 10:56:16 2026|192.168.1.100|carol@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|1421|29279|None|11
+Mon Jul 06 11:15:08 2026|192.168.1.101|carol@company.com|https://www.google.com/search?q=zscaler+nss+feed+format|200|Allowed|Web Search Engines|CLEAN|GET|646|31276|None|8
+Mon Jul 06 11:16:07 2026|192.168.1.100|carol@company.com|https://ec2.amazonaws.com/?Action=DescribeInstances&Version=2016-11-15|200|Allowed|Software Downloads|CLEAN|GET|777|40438|None|6
+Mon Jul 06 11:21:26 2026|192.168.1.102|bob@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|1020|36851|None|1
+Mon Jul 06 12:23:27 2026|192.168.1.100|carol@company.com|https://github.com/psf/requests/issues|200|Allowed|General Surfing|CLEAN|GET|455|47969|None|9
+Mon Jul 06 12:30:39 2026|192.168.1.100|bob@company.com|https://stackoverflow.com/questions/312443/how-do-i-parse-a-string-to-a-float|200|Allowed|General Surfing|CLEAN|GET|1378|13542|None|12
+Mon Jul 06 12:52:02 2026|192.168.1.101|bob@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|1361|47849|None|10
+Mon Jul 06 13:54:43 2026|192.168.1.102|alice@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|911|35713|None|13
+Mon Jul 06 13:55:30 2026|192.168.1.100|alice@company.com|https://stackoverflow.com/questions/312443/how-do-i-parse-a-string-to-a-float|200|Allowed|General Surfing|CLEAN|GET|1381|42051|None|1
+Mon Jul 06 15:08:55 2026|192.168.1.101|alice@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|GET|870|14671|None|14
+Tue Jul 07 10:26:26 2026|192.168.1.101|carol@company.com|https://stackoverflow.com/questions/509211/understanding-slice-notation|200|Allowed|General Surfing|CLEAN|GET|623|28334|None|12
+Tue Jul 07 10:28:51 2026|192.168.1.102|alice@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|GET|1307|1767|None|2
+Tue Jul 07 10:46:12 2026|192.168.1.101|alice@company.com|https://ec2.amazonaws.com/?Action=DescribeInstances&Version=2016-11-15|200|Allowed|Software Downloads|CLEAN|POST|579|13352|None|6
+Tue Jul 07 11:26:31 2026|192.168.1.101|alice@company.com|https://stackoverflow.com/questions/312443/how-do-i-parse-a-string-to-a-float|200|Allowed|General Surfing|CLEAN|POST|537|25636|None|0
+Tue Jul 07 11:51:36 2026|192.168.1.101|alice@company.com|https://github.com/torvalds/linux|200|Allowed|General Surfing|CLEAN|GET|1052|40535|None|7
+Tue Jul 07 12:18:13 2026|192.168.1.100|carol@company.com|https://ec2.amazonaws.com/?Action=DescribeInstances&Version=2016-11-15|200|Allowed|Software Downloads|CLEAN|GET|842|4546|None|1
+Tue Jul 07 12:36:24 2026|192.168.1.100|bob@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|GET|1168|47017|None|12
+Tue Jul 07 13:21:20 2026|192.168.1.102|alice@company.com|https://www.google.com/search?q=flask+sqlalchemy+tutorial|200|Allowed|Web Search Engines|CLEAN|GET|984|46278|None|4
+Tue Jul 07 13:25:08 2026|192.168.1.102|carol@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|348|1410|None|14
+Tue Jul 07 13:25:35 2026|192.168.1.100|bob@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|1387|40558|None|10
+Tue Jul 07 13:35:00 2026|192.168.1.102|bob@company.com|https://www.google.com/search?q=zscaler+nss+feed+format|200|Allowed|Web Search Engines|CLEAN|GET|432|31041|None|3
+Tue Jul 07 13:49:49 2026|192.168.1.102|bob@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|GET|1100|5877|None|9
+Tue Jul 07 14:48:10 2026|192.168.1.102|carol@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|GET|1200|2076|None|3
+Tue Jul 07 14:50:59 2026|192.168.1.101|carol@company.com|https://github.com/torvalds/linux|200|Allowed|General Surfing|CLEAN|GET|421|25870|None|1
+Tue Jul 07 15:21:17 2026|192.168.1.100|bob@company.com|https://github.com/psf/requests/issues|200|Allowed|General Surfing|CLEAN|GET|1018|45332|None|10
+Tue Jul 07 16:03:35 2026|192.168.1.100|alice@company.com|https://stackoverflow.com/questions/509211/understanding-slice-notation|200|Allowed|General Surfing|CLEAN|GET|1151|44550|None|10
+Tue Jul 07 16:06:55 2026|192.168.1.100|carol@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|1102|23128|None|5
+Tue Jul 07 16:25:56 2026|192.168.1.102|bob@company.com|https://www.google.com/search?q=flask+sqlalchemy+tutorial|200|Allowed|Web Search Engines|CLEAN|GET|705|49623|None|8
+Tue Jul 07 16:34:30 2026|192.168.1.101|bob@company.com|https://ec2.amazonaws.com/?Action=DescribeInstances&Version=2016-11-15|200|Allowed|Software Downloads|CLEAN|GET|972|30641|None|10
+Tue Jul 07 16:35:10 2026|192.168.1.101|carol@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|633|36143|None|6
+Tue Jul 07 16:37:17 2026|192.168.1.100|alice@company.com|https://stackoverflow.com/questions/312443/how-do-i-parse-a-string-to-a-float|200|Allowed|General Surfing|CLEAN|GET|518|14910|None|10
+Tue Jul 07 16:58:08 2026|192.168.1.102|carol@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|POST|1412|37787|None|0
+Tue Jul 07 16:59:45 2026|192.168.1.101|carol@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|1188|31747|None|7
+Wed Jul 08 09:00:21 2026|192.168.1.100|carol@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|1104|36954|None|13
+Wed Jul 08 09:37:35 2026|192.168.1.100|carol@company.com|https://github.com/torvalds/linux|200|Allowed|General Surfing|CLEAN|GET|1492|4658|None|7
+Wed Jul 08 10:15:12 2026|192.168.1.100|carol@company.com|https://stackoverflow.com/questions/509211/understanding-slice-notation|200|Allowed|General Surfing|CLEAN|GET|575|19054|None|14
+Wed Jul 08 10:32:41 2026|192.168.1.101|alice@company.com|https://stackoverflow.com/questions/312443/how-do-i-parse-a-string-to-a-float|200|Allowed|General Surfing|CLEAN|GET|416|29211|None|11
+Wed Jul 08 11:19:00 2026|192.168.1.102|carol@company.com|https://www.google.com/search?q=flask+sqlalchemy+tutorial|200|Allowed|Web Search Engines|CLEAN|GET|311|37064|None|9
+Wed Jul 08 11:23:22 2026|192.168.1.100|carol@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|346|40720|None|5
+Wed Jul 08 11:37:27 2026|192.168.1.102|bob@company.com|https://www.google.com/search?q=zscaler+nss+feed+format|200|Allowed|Web Search Engines|CLEAN|GET|1036|22643|None|10
+Wed Jul 08 11:38:38 2026|192.168.1.102|carol@company.com|https://www.google.com/search?q=zscaler+nss+feed+format|200|Allowed|Web Search Engines|CLEAN|GET|535|21184|None|3
+Wed Jul 08 12:43:40 2026|192.168.1.101|carol@company.com|https://stackoverflow.com/questions/509211/understanding-slice-notation|200|Allowed|General Surfing|CLEAN|GET|304|6848|None|13
+Wed Jul 08 13:10:28 2026|192.168.1.102|carol@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|1283|1312|None|9
+Wed Jul 08 13:15:03 2026|192.168.1.100|carol@company.com|https://www.google.com/search?q=zscaler+nss+feed+format|200|Allowed|Web Search Engines|CLEAN|GET|1195|5335|None|4
+Wed Jul 08 13:35:00 2026|192.168.1.102|alice@company.com|https://www.google.com/search?q=zscaler+nss+feed+format|200|Allowed|Web Search Engines|CLEAN|GET|1032|32819|None|7
+Wed Jul 08 14:05:52 2026|192.168.1.100|carol@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|607|10456|None|0
+Wed Jul 08 14:48:56 2026|192.168.1.101|bob@company.com|https://stackoverflow.com/questions/312443/how-do-i-parse-a-string-to-a-float|200|Allowed|General Surfing|CLEAN|GET|367|31622|None|0
+Wed Jul 08 15:38:32 2026|192.168.1.100|bob@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|290|47250|None|13
+Wed Jul 08 15:39:47 2026|192.168.1.100|alice@company.com|https://www.google.com/search?q=flask+sqlalchemy+tutorial|200|Allowed|Web Search Engines|CLEAN|POST|562|27820|None|0
+Wed Jul 08 15:42:41 2026|192.168.1.101|bob@company.com|https://ec2.amazonaws.com/?Action=DescribeInstances&Version=2016-11-15|200|Allowed|Software Downloads|CLEAN|GET|707|15525|None|2
+Wed Jul 08 16:04:43 2026|192.168.1.100|bob@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|GET|605|28661|None|3
+Thu Jul 09 09:12:33 2026|192.168.1.101|carol@company.com|https://stackoverflow.com/questions/509211/understanding-slice-notation|200|Allowed|General Surfing|CLEAN|GET|305|14140|None|8
+Thu Jul 09 10:20:16 2026|192.168.1.101|alice@company.com|https://stackoverflow.com/questions/312443/how-do-i-parse-a-string-to-a-float|200|Allowed|General Surfing|CLEAN|GET|202|43900|None|14
+Thu Jul 09 10:29:44 2026|192.168.1.101|carol@company.com|https://stackoverflow.com/questions/312443/how-do-i-parse-a-string-to-a-float|200|Allowed|General Surfing|CLEAN|POST|1224|36188|None|15
+Thu Jul 09 10:38:02 2026|192.168.1.101|carol@company.com|https://github.com/psf/requests/issues|200|Allowed|General Surfing|CLEAN|GET|252|6785|None|7
+Thu Jul 09 11:02:19 2026|192.168.1.101|alice@company.com|https://github.com/psf/requests/issues|200|Allowed|General Surfing|CLEAN|GET|711|44508|None|3
+Thu Jul 09 11:24:12 2026|192.168.1.102|carol@company.com|https://www.google.com/search?q=flask+sqlalchemy+tutorial|200|Allowed|Web Search Engines|CLEAN|GET|765|27993|None|10
+Thu Jul 09 11:27:11 2026|192.168.1.102|carol@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|GET|1302|32486|None|14
+Thu Jul 09 11:31:02 2026|192.168.1.100|carol@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|405|29655|None|3
+Thu Jul 09 12:12:52 2026|192.168.1.101|bob@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|666|15409|None|0
+Thu Jul 09 12:31:14 2026|192.168.1.101|bob@company.com|https://stackoverflow.com/questions/509211/understanding-slice-notation|200|Allowed|General Surfing|CLEAN|GET|888|44635|None|12
+Thu Jul 09 13:20:54 2026|192.168.1.100|alice@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|699|49983|None|14
+Thu Jul 09 13:46:37 2026|192.168.1.102|carol@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|POST|597|20214|None|7
+Thu Jul 09 13:59:50 2026|192.168.1.101|bob@company.com|https://stackoverflow.com/questions/312443/how-do-i-parse-a-string-to-a-float|200|Allowed|General Surfing|CLEAN|GET|1338|44176|None|15
+Thu Jul 09 14:27:47 2026|192.168.1.102|bob@company.com|https://github.com/psf/requests/issues|200|Allowed|General Surfing|CLEAN|GET|754|20894|None|8
+Thu Jul 09 15:15:09 2026|192.168.1.102|carol@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|GET|418|28662|None|7
+Thu Jul 09 15:38:29 2026|192.168.1.102|bob@company.com|https://ec2.amazonaws.com/?Action=DescribeInstances&Version=2016-11-15|200|Allowed|Software Downloads|CLEAN|GET|223|45383|None|3
+Thu Jul 09 15:53:58 2026|192.168.1.102|bob@company.com|https://www.google.com/search?q=flask+sqlalchemy+tutorial|200|Allowed|Web Search Engines|CLEAN|GET|1172|30295|None|8
+Thu Jul 09 16:28:43 2026|192.168.1.100|carol@company.com|https://stackoverflow.com/questions/509211/understanding-slice-notation|200|Allowed|General Surfing|CLEAN|GET|547|43978|None|2
+Thu Jul 09 16:28:50 2026|192.168.1.100|alice@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|698|20867|None|11
+Thu Jul 09 16:55:46 2026|192.168.1.100|carol@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|POST|401|4772|None|12
+Fri Jul 10 09:07:04 2026|192.168.1.102|alice@company.com|https://ec2.amazonaws.com/?Action=DescribeInstances&Version=2016-11-15|200|Allowed|Software Downloads|CLEAN|GET|956|38975|None|4
+Fri Jul 10 09:22:14 2026|192.168.1.102|alice@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|GET|263|17005|None|6
+Fri Jul 10 09:48:43 2026|192.168.1.101|carol@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|GET|558|31634|None|14
+Fri Jul 10 09:54:56 2026|192.168.1.102|bob@company.com|https://stackoverflow.com/questions/509211/understanding-slice-notation|200|Allowed|General Surfing|CLEAN|GET|920|20369|None|12
+Fri Jul 10 09:59:19 2026|192.168.1.102|carol@company.com|https://stackoverflow.com/questions/312443/how-do-i-parse-a-string-to-a-float|200|Allowed|General Surfing|CLEAN|GET|606|5780|None|7
+Fri Jul 10 10:04:34 2026|192.168.1.100|carol@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|914|5308|None|7
+Fri Jul 10 10:10:00 2026|192.168.1.101|bob@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|266|15970|None|9
+Fri Jul 10 10:26:42 2026|192.168.1.102|carol@company.com|https://ec2.amazonaws.com/?Action=DescribeInstances&Version=2016-11-15|200|Allowed|Software Downloads|CLEAN|GET|734|14186|None|10
+Fri Jul 10 10:43:55 2026|192.168.1.100|bob@company.com|https://www.google.com/search?q=zscaler+nss+feed+format|200|Allowed|Web Search Engines|CLEAN|POST|1366|16935|None|1
+Fri Jul 10 10:48:13 2026|192.168.1.102|alice@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|521|16519|None|5
+Fri Jul 10 10:59:24 2026|192.168.1.100|carol@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|1466|24500|None|6
+Fri Jul 10 11:32:58 2026|192.168.1.100|carol@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|1239|40709|None|6
+Fri Jul 10 11:59:18 2026|192.168.1.101|carol@company.com|https://stackoverflow.com/questions/509211/understanding-slice-notation|200|Allowed|General Surfing|CLEAN|GET|1490|40703|None|7
+Fri Jul 10 12:10:29 2026|192.168.1.101|bob@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|GET|649|45666|None|10
+Fri Jul 10 12:41:09 2026|192.168.1.101|alice@company.com|https://www.google.com/search?q=zscaler+nss+feed+format|200|Allowed|Web Search Engines|CLEAN|GET|829|39796|None|9
+Fri Jul 10 13:42:26 2026|192.168.1.101|bob@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|592|28354|None|12
+Fri Jul 10 13:49:41 2026|192.168.1.101|alice@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|1129|1012|None|8
+Fri Jul 10 13:52:00 2026|192.168.1.101|carol@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|1387|44049|None|15
+Fri Jul 10 15:21:01 2026|192.168.1.101|bob@company.com|https://www.google.com/search?q=flask+sqlalchemy+tutorial|200|Allowed|Web Search Engines|CLEAN|GET|926|17731|None|10
+Fri Jul 10 15:28:58 2026|192.168.1.101|bob@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|POST|825|38065|None|1
+Fri Jul 10 15:57:37 2026|192.168.1.101|bob@company.com|https://github.com/torvalds/linux|200|Allowed|General Surfing|CLEAN|POST|483|34192|None|15
+Fri Jul 10 16:15:50 2026|192.168.1.101|bob@company.com|https://github.com/torvalds/linux|200|Allowed|General Surfing|CLEAN|GET|1082|24019|None|13
+Fri Jul 10 16:32:58 2026|192.168.1.102|alice@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|POST|364|12978|None|2
