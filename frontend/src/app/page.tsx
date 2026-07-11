@@ -3,20 +3,29 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ApiError, isAuthenticated, login } from "@/lib/auth";
+import { ApiError, login, useAuthUser, useHasMounted } from "@/lib/auth";
 
 export default function LoginPage() {
   const router = useRouter();
+  const hasMounted = useHasMounted();
+  const user = useAuthUser();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (isAuthenticated()) {
+    if (hasMounted && user) {
       router.replace("/dashboard");
     }
-  }, [router]);
+  }, [hasMounted, user, router]);
+
+  // Server rendering can't know whether a valid session exists, so default to
+  // a blank screen until the client has hydrated and checked — this avoids
+  // flashing the login form for an already-logged-in user on reload.
+  if (!hasMounted || user) {
+    return <div className="flex flex-1 bg-black" />;
+  }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();

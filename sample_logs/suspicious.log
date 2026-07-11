@@ -1,16 +1,19 @@
 Mon Jul 06 09:30:54 2026|192.168.1.135|dave@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|GET|1108|5616|None|2
 Mon Jul 06 11:16:03 2026|192.168.1.118|frank@company.com|https://stackoverflow.com/questions/312443/how-do-i-parse-a-string-to-a-float|200|Allowed|General Surfing|CLEAN|GET|330|32011|None|14
-Mon Jul 06 12:24:36 2026|192.168.1.132|erin@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|351|199250403|None|20
+Mon Jul 06 12:24:36 2026|10.1.1.60|carol@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|494|1711|Trojan|89
 Mon Jul 06 13:31:07 2026|192.168.1.116|bob@company.com|https://ec2.amazonaws.com/?Action=DescribeInstances&Version=2016-11-15|200|Allowed|Software Downloads|CLEAN|GET|1129|25114|None|13
 Mon Jul 06 13:50:28 2026|192.168.1.112|erin@company.com|https://github.com/psf/requests/issues|200|Allowed|General Surfing|CLEAN|GET|384|20140|None|10
+Mon Jul 06 15:17:00 2026|10.1.1.65|erin@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|225|282781003|None|35
+Tue Jul 07 03:14:29 2026|10.1.1.77|admin@company.com|http://malware.com/callback|200|Allowed|Spyware Callback|CLEAN|POST|526|460|None|54
+Tue Jul 07 10:28:22 2026|10.1.1.60|erin@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|353|3117|Trojan|93
 Tue Jul 07 10:42:55 2026|192.168.1.111|bob@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|GET|687|39391|None|10
-Tue Jul 07 12:29:40 2026|192.168.1.126|dave@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|330|3231|Trojan|80
 Tue Jul 07 14:49:09 2026|192.168.1.148|alice@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|496|9319|None|8
 Tue Jul 07 16:28:15 2026|192.168.1.133|alice@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|GET|934|4768|None|12
+Wed Jul 08 03:42:00 2026|10.1.1.77|admin@company.com|http://malware.com/callback|200|Allowed|Spyware Callback|CLEAN|POST|438|494|None|57
 Wed Jul 08 10:28:32 2026|192.168.1.124|erin@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|GET|1267|20567|None|14
-Wed Jul 08 11:04:08 2026|192.168.1.127|erin@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|GET|865|25762|None|9
 Wed Jul 08 12:07:54 2026|192.168.1.139|alice@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|GET|1422|2199|None|1
 Wed Jul 08 12:08:50 2026|192.168.1.146|bob@company.com|https://www.google.com/search?q=zscaler+nss+feed+format|200|Allowed|Web Search Engines|CLEAN|GET|1335|14376|None|6
+Wed Jul 08 12:38:51 2026|10.1.1.65|carol@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|312|290890810|None|26
 Wed Jul 08 14:00:00 2026|10.1.1.50|-|https://portal.company.com/api/login|200|Allowed|General Surfing|CLEAN|POST|383|383|None|5
 Wed Jul 08 14:00:05 2026|10.1.1.50|-|https://portal.company.com/api/login|401|Allowed|General Surfing|CLEAN|POST|334|223|None|5
 Wed Jul 08 14:00:10 2026|10.1.1.50|-|https://portal.company.com/api/login|401|Allowed|General Surfing|CLEAN|POST|372|485|None|5
@@ -36,15 +39,12 @@ Wed Jul 08 14:01:45 2026|10.1.1.50|-|https://portal.company.com/api/login|401|Al
 Wed Jul 08 14:01:50 2026|10.1.1.50|-|https://portal.company.com/api/login|200|Allowed|General Surfing|CLEAN|POST|324|555|None|5
 Wed Jul 08 14:01:55 2026|10.1.1.50|-|https://portal.company.com/api/login|401|Allowed|General Surfing|CLEAN|POST|193|239|None|5
 Wed Jul 08 14:02:00 2026|10.1.1.50|-|https://portal.company.com/api/login|401|Allowed|General Surfing|CLEAN|POST|306|595|None|5
-Wed Jul 08 15:44:16 2026|192.168.1.139|carol@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|301|2075|Trojan|95
+Wed Jul 08 16:54:19 2026|10.1.1.60|bob@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|396|3995|Trojan|95
 Thu Jul 09 03:39:43 2026|10.1.1.77|admin@company.com|http://malware.com/callback|200|Allowed|Spyware Callback|CLEAN|POST|323|709|None|58
 Thu Jul 09 11:12:08 2026|192.168.1.144|carol@company.com|https://ec2.amazonaws.com/?Action=DescribeInstances&Version=2016-11-15|200|Allowed|Software Downloads|CLEAN|GET|758|11583|None|8
-Thu Jul 09 13:00:36 2026|192.168.1.113|erin@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|454|196824657|None|27
-Thu Jul 09 13:43:34 2026|192.168.1.120|alice@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|426|1915|Trojan|98
 Thu Jul 09 13:47:55 2026|192.168.1.131|alice@company.com|https://stackoverflow.com/questions/509211/understanding-slice-notation|200|Allowed|General Surfing|CLEAN|POST|488|15585|None|12
-Thu Jul 09 15:06:50 2026|192.168.1.117|frank@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|GET|1329|48040|None|6
 Fri Jul 10 11:56:26 2026|192.168.1.116|dave@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|772|2944|None|11
 Fri Jul 10 12:41:04 2026|192.168.1.139|frank@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|438|9960|None|1
+Fri Jul 10 13:43:48 2026|10.1.1.65|frank@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|270|288644067|None|23
 Fri Jul 10 14:05:50 2026|192.168.1.135|alice@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|1131|24955|None|8
-Fri Jul 10 14:14:40 2026|192.168.1.122|erin@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|480|41972|None|3
 Fri Jul 10 15:52:40 2026|192.168.1.133|alice@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|GET|251|41402|None|10

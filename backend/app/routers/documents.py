@@ -3,6 +3,7 @@ from sqlalchemy import func
 
 from app.auth import require_role
 from app.database import SessionLocal
+from app.detection.chains import build_attack_chains
 from app.detection.rules import detect_anomalies
 from app.models.anomaly import Anomaly
 from app.models.log_entry import LogEntry
@@ -193,3 +194,21 @@ def get_anomalies(log_id):
             for a, e in rows
         ]
     )
+
+
+@documents_bp.get("/logs/<int:log_id>/chains")
+@require_role()
+def get_chains(log_id):
+    db = SessionLocal()
+    log_file = _get_owned_log_file(db, log_id)
+    if not log_file:
+        return jsonify({"error": "log file not found"}), 404
+
+    rows = (
+        db.query(Anomaly, LogEntry)
+        .join(LogEntry, Anomaly.log_entry_id == LogEntry.id)
+        .filter(LogEntry.log_file_id == log_id)
+        .all()
+    )
+
+    return jsonify(build_attack_chains(rows))

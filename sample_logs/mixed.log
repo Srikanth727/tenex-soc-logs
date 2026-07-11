@@ -1,27 +1,28 @@
-Mon Jul 06 09:13:19 2026|192.168.1.123|bob@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|330|1685|Trojan|90
+Mon Jul 06 03:53:05 2026|10.1.1.77|admin@company.com|http://malware.com/callback|200|Allowed|Spyware Callback|CLEAN|POST|247|642|None|43
 Mon Jul 06 09:13:30 2026|192.168.1.114|bob@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|1111|1408|None|0
 Mon Jul 06 09:16:13 2026|192.168.1.119|erin@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|427|19681|None|7
-Mon Jul 06 09:31:47 2026|192.168.1.137|bob@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|266|2057|Trojan|97
 Mon Jul 06 09:34:35 2026|192.168.1.136|alice@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|GET|762|35910|None|9
-Mon Jul 06 09:39:41 2026|192.168.1.120|dave@company.com|https://github.com/psf/requests/issues|200|Allowed|General Surfing|CLEAN|GET|1486|49838|None|4
+Mon Jul 06 10:17:28 2026|10.1.1.60|frank@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|417|2489|Trojan|99
 Mon Jul 06 10:22:35 2026|192.168.1.115|erin@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|988|1608|None|9
 Mon Jul 06 10:40:50 2026|192.168.1.139|alice@company.com|https://www.google.com/search?q=zscaler+nss+feed+format|200|Allowed|Web Search Engines|CLEAN|POST|523|29720|None|14
-Mon Jul 06 10:47:33 2026|192.168.1.123|dave@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|414|2358|Trojan|90
+Mon Jul 06 10:47:33 2026|10.1.1.60|bob@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|392|2219|Trojan|94
 Mon Jul 06 11:00:13 2026|192.168.1.142|dave@company.com|https://github.com/psf/requests/issues|200|Allowed|General Surfing|CLEAN|GET|1462|32467|None|15
 Mon Jul 06 11:05:31 2026|192.168.1.137|frank@company.com|https://github.com/psf/requests/issues|200|Allowed|General Surfing|CLEAN|GET|395|35413|None|1
+Mon Jul 06 11:49:40 2026|192.168.1.141|dave@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|1119|45438|None|10
 Mon Jul 06 11:54:38 2026|192.168.1.138|alice@company.com|https://www.google.com/search?q=flask+sqlalchemy+tutorial|200|Allowed|Web Search Engines|CLEAN|GET|950|24533|None|12
+Mon Jul 06 11:55:09 2026|10.1.1.60|erin@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|405|785|Trojan|84
 Mon Jul 06 11:58:22 2026|192.168.1.129|frank@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|GET|1418|47254|None|2
 Mon Jul 06 12:13:51 2026|192.168.1.147|frank@company.com|https://github.com/psf/requests/issues|200|Allowed|General Surfing|CLEAN|GET|1449|42269|None|13
 Mon Jul 06 12:23:35 2026|192.168.1.128|alice@company.com|https://stackoverflow.com/questions/312443/how-do-i-parse-a-string-to-a-float|200|Allowed|General Surfing|CLEAN|GET|1326|19131|None|3
-Mon Jul 06 12:27:37 2026|192.168.1.135|erin@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|240|226237812|None|29
+Mon Jul 06 12:25:38 2026|10.1.1.65|alice@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|203|174874415|None|29
 Mon Jul 06 12:42:42 2026|192.168.1.132|bob@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|GET|1353|43072|None|12
 Mon Jul 06 12:50:08 2026|192.168.1.125|dave@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|GET|1372|24976|None|14
 Mon Jul 06 12:51:48 2026|192.168.1.147|frank@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|GET|1181|14489|None|10
 Mon Jul 06 13:26:11 2026|192.168.1.118|frank@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|POST|966|25866|None|14
+Mon Jul 06 13:43:43 2026|10.1.1.65|erin@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|449|261447797|None|29
 Mon Jul 06 13:55:41 2026|192.168.1.118|frank@company.com|https://www.google.com/search?q=flask+sqlalchemy+tutorial|200|Allowed|Web Search Engines|CLEAN|GET|859|17023|None|12
 Mon Jul 06 14:06:35 2026|192.168.1.134|carol@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|1434|10654|None|10
 Mon Jul 06 14:16:15 2026|192.168.1.141|erin@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|419|9679|None|9
-Mon Jul 06 14:23:56 2026|192.168.1.129|bob@company.com|https://stackoverflow.com/questions/312443/how-do-i-parse-a-string-to-a-float|200|Allowed|General Surfing|CLEAN|GET|472|42846|None|4
 Mon Jul 06 14:41:06 2026|192.168.1.120|frank@company.com|https://github.com/torvalds/linux|200|Allowed|General Surfing|CLEAN|GET|1330|11294|None|10
 Mon Jul 06 14:41:42 2026|192.168.1.134|erin@company.com|https://github.com/psf/requests/issues|200|Allowed|General Surfing|CLEAN|GET|1036|10579|None|9
 Mon Jul 06 14:59:19 2026|192.168.1.142|dave@company.com|https://ec2.amazonaws.com/?Action=DescribeInstances&Version=2016-11-15|200|Allowed|Software Downloads|CLEAN|GET|274|43195|None|6
@@ -29,84 +30,83 @@ Mon Jul 06 15:08:56 2026|192.168.1.126|frank@company.com|https://github.com/psf/
 Mon Jul 06 15:12:44 2026|192.168.1.118|frank@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|761|6917|None|11
 Mon Jul 06 15:21:53 2026|192.168.1.149|dave@company.com|https://github.com/psf/requests/issues|200|Allowed|General Surfing|CLEAN|GET|1081|43466|None|4
 Mon Jul 06 15:23:43 2026|192.168.1.125|dave@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|1119|16135|None|7
-Mon Jul 06 15:29:37 2026|192.168.1.145|frank@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|GET|1370|43518|None|6
 Mon Jul 06 15:51:58 2026|192.168.1.121|alice@company.com|https://www.google.com/search?q=zscaler+nss+feed+format|200|Allowed|Web Search Engines|CLEAN|GET|693|13378|None|8
 Mon Jul 06 16:08:12 2026|192.168.1.134|erin@company.com|https://ec2.amazonaws.com/?Action=DescribeInstances&Version=2016-11-15|200|Allowed|Software Downloads|CLEAN|GET|1037|45672|None|15
-Tue Jul 07 03:09:42 2026|10.1.1.77|admin@company.com|http://malware.com/callback|200|Allowed|Spyware Callback|CLEAN|POST|446|429|None|43
 Tue Jul 07 09:16:35 2026|192.168.1.147|erin@company.com|https://stackoverflow.com/questions/312443/how-do-i-parse-a-string-to-a-float|200|Allowed|General Surfing|CLEAN|GET|601|22418|None|7
 Tue Jul 07 09:25:28 2026|192.168.1.124|erin@company.com|https://github.com/torvalds/linux|200|Allowed|General Surfing|CLEAN|GET|315|9983|None|9
 Tue Jul 07 09:36:44 2026|192.168.1.117|bob@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|GET|1057|10724|None|13
 Tue Jul 07 09:42:57 2026|192.168.1.143|bob@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|GET|405|27886|None|10
-Tue Jul 07 09:43:05 2026|192.168.1.127|dave@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|417|2489|Trojan|99
 Tue Jul 07 10:08:54 2026|192.168.1.114|dave@company.com|https://www.google.com/search?q=flask+sqlalchemy+tutorial|200|Allowed|Web Search Engines|CLEAN|GET|1111|6553|None|10
 Tue Jul 07 10:25:23 2026|192.168.1.131|erin@company.com|https://github.com/psf/requests/issues|200|Allowed|General Surfing|CLEAN|GET|607|40283|None|12
+Tue Jul 07 10:32:40 2026|10.1.1.65|alice@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|471|256889214|None|26
 Tue Jul 07 10:33:23 2026|192.168.1.114|erin@company.com|https://ec2.amazonaws.com/?Action=DescribeInstances&Version=2016-11-15|200|Allowed|Software Downloads|CLEAN|GET|1239|37116|None|0
 Tue Jul 07 10:33:28 2026|192.168.1.143|frank@company.com|https://github.com/psf/requests/issues|200|Allowed|General Surfing|CLEAN|GET|1355|8153|None|1
 Tue Jul 07 10:49:37 2026|192.168.1.131|bob@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|GET|893|42926|None|5
 Tue Jul 07 11:02:18 2026|192.168.1.140|frank@company.com|https://www.google.com/search?q=flask+sqlalchemy+tutorial|200|Allowed|Web Search Engines|CLEAN|GET|1160|30199|None|0
 Tue Jul 07 11:04:18 2026|192.168.1.116|erin@company.com|https://ec2.amazonaws.com/?Action=DescribeInstances&Version=2016-11-15|200|Allowed|Software Downloads|CLEAN|GET|1278|3273|None|10
 Tue Jul 07 11:30:09 2026|192.168.1.139|frank@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|1324|31656|None|6
+Tue Jul 07 11:48:16 2026|10.1.1.65|carol@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|367|152208053|None|20
 Tue Jul 07 11:50:13 2026|192.168.1.123|alice@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|775|39915|None|5
 Tue Jul 07 12:17:35 2026|192.168.1.129|bob@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|624|46035|None|15
 Tue Jul 07 12:29:22 2026|192.168.1.119|carol@company.com|https://github.com/torvalds/linux|200|Allowed|General Surfing|CLEAN|POST|431|2911|None|13
 Tue Jul 07 12:36:53 2026|192.168.1.134|frank@company.com|https://ec2.amazonaws.com/?Action=DescribeInstances&Version=2016-11-15|200|Allowed|Software Downloads|CLEAN|GET|486|45974|None|2
 Tue Jul 07 12:37:22 2026|192.168.1.113|alice@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|1163|19526|None|0
 Tue Jul 07 12:57:55 2026|192.168.1.146|dave@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|352|45654|None|8
-Tue Jul 07 13:12:11 2026|192.168.1.148|bob@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|238|167552300|None|40
 Tue Jul 07 13:15:16 2026|192.168.1.119|frank@company.com|https://stackoverflow.com/questions/312443/how-do-i-parse-a-string-to-a-float|200|Allowed|General Surfing|CLEAN|GET|351|30230|None|15
 Tue Jul 07 13:56:02 2026|192.168.1.110|carol@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|886|19449|None|14
-Tue Jul 07 14:04:25 2026|192.168.1.112|dave@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|209|2383|Trojan|82
-Tue Jul 07 14:19:46 2026|192.168.1.130|erin@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|243|715|Trojan|84
 Tue Jul 07 14:33:57 2026|192.168.1.128|alice@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|1328|18786|None|4
 Tue Jul 07 14:36:38 2026|192.168.1.130|bob@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|1267|15286|None|13
 Tue Jul 07 15:32:49 2026|192.168.1.149|dave@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|GET|1262|14388|None|10
 Tue Jul 07 15:32:58 2026|192.168.1.113|alice@company.com|https://ec2.amazonaws.com/?Action=DescribeInstances&Version=2016-11-15|200|Allowed|Software Downloads|CLEAN|GET|537|11414|None|10
 Tue Jul 07 15:43:32 2026|192.168.1.129|frank@company.com|https://www.google.com/search?q=zscaler+nss+feed+format|200|Allowed|Web Search Engines|CLEAN|GET|804|24887|None|7
 Tue Jul 07 15:52:27 2026|192.168.1.142|carol@company.com|https://www.google.com/search?q=zscaler+nss+feed+format|200|Allowed|Web Search Engines|CLEAN|GET|395|12909|None|4
-Wed Jul 08 03:54:35 2026|10.1.1.77|admin@company.com|http://malware.com/callback|200|Allowed|Spyware Callback|CLEAN|POST|388|317|None|48
+Wed Jul 08 03:23:09 2026|10.1.1.77|admin@company.com|http://malware.com/callback|200|Allowed|Spyware Callback|CLEAN|POST|551|685|None|42
+Wed Jul 08 03:51:08 2026|10.1.1.77|admin@company.com|http://malware.com/callback|200|Allowed|Spyware Callback|CLEAN|POST|484|261|None|58
+Wed Jul 08 03:55:42 2026|10.1.1.77|admin@company.com|http://malware.com/callback|200|Allowed|Spyware Callback|CLEAN|POST|584|633|None|41
+Wed Jul 08 09:11:17 2026|10.1.1.60|frank@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|358|1891|Trojan|91
 Wed Jul 08 09:13:59 2026|192.168.1.122|frank@company.com|https://www.google.com/search?q=zscaler+nss+feed+format|200|Allowed|Web Search Engines|CLEAN|GET|1180|16698|None|6
 Wed Jul 08 09:40:17 2026|192.168.1.138|dave@company.com|https://github.com/torvalds/linux|200|Allowed|General Surfing|CLEAN|GET|968|29101|None|5
 Wed Jul 08 10:03:15 2026|192.168.1.136|frank@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|427|33556|None|0
 Wed Jul 08 10:08:05 2026|192.168.1.121|dave@company.com|https://stackoverflow.com/questions/509211/understanding-slice-notation|200|Allowed|General Surfing|CLEAN|GET|1249|27541|None|3
+Wed Jul 08 10:19:29 2026|192.168.1.138|alice@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|GET|787|5828|None|2
 Wed Jul 08 10:23:42 2026|192.168.1.120|alice@company.com|https://stackoverflow.com/questions/312443/how-do-i-parse-a-string-to-a-float|200|Allowed|General Surfing|CLEAN|GET|679|28930|None|2
 Wed Jul 08 10:32:41 2026|192.168.1.120|erin@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|1478|48027|None|10
 Wed Jul 08 10:35:34 2026|192.168.1.128|carol@company.com|https://www.google.com/search?q=flask+sqlalchemy+tutorial|200|Allowed|Web Search Engines|CLEAN|GET|556|24490|None|7
 Wed Jul 08 10:41:54 2026|192.168.1.112|alice@company.com|https://stackoverflow.com/questions/312443/how-do-i-parse-a-string-to-a-float|200|Allowed|General Surfing|CLEAN|GET|1331|31995|None|1
 Wed Jul 08 10:43:08 2026|192.168.1.130|alice@company.com|https://github.com/torvalds/linux|200|Allowed|General Surfing|CLEAN|GET|574|25264|None|4
 Wed Jul 08 10:45:54 2026|192.168.1.143|alice@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|528|18677|None|14
-Wed Jul 08 10:55:27 2026|192.168.1.118|dave@company.com|https://www.google.com/search?q=zscaler+nss+feed+format|200|Allowed|Web Search Engines|CLEAN|GET|382|48691|None|3
 Wed Jul 08 11:08:46 2026|192.168.1.144|dave@company.com|https://www.google.com/search?q=flask+sqlalchemy+tutorial|200|Allowed|Web Search Engines|CLEAN|POST|1310|42861|None|1
 Wed Jul 08 11:18:02 2026|192.168.1.128|frank@company.com|https://www.google.com/search?q=zscaler+nss+feed+format|200|Allowed|Web Search Engines|CLEAN|GET|1105|43789|None|8
-Wed Jul 08 11:51:39 2026|192.168.1.139|frank@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|385|143657185|None|33
-Wed Jul 08 12:21:49 2026|192.168.1.120|alice@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|461|289979952|None|23
+Wed Jul 08 11:23:19 2026|10.1.1.60|frank@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|366|3681|Trojan|98
+Wed Jul 08 11:28:04 2026|192.168.1.140|dave@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|GET|762|39559|None|1
 Wed Jul 08 12:29:07 2026|192.168.1.127|dave@company.com|https://github.com/torvalds/linux|200|Allowed|General Surfing|CLEAN|GET|303|19819|None|12
 Wed Jul 08 12:34:18 2026|192.168.1.120|dave@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|1214|36826|None|3
 Wed Jul 08 12:46:03 2026|192.168.1.147|dave@company.com|https://www.google.com/search?q=flask+sqlalchemy+tutorial|200|Allowed|Web Search Engines|CLEAN|GET|1469|25716|None|4
+Wed Jul 08 12:51:27 2026|10.1.1.60|erin@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|485|607|Trojan|99
 Wed Jul 08 13:03:35 2026|192.168.1.147|frank@company.com|https://www.google.com/search?q=flask+sqlalchemy+tutorial|200|Allowed|Web Search Engines|CLEAN|GET|1074|37228|None|15
 Wed Jul 08 13:17:31 2026|192.168.1.119|alice@company.com|https://www.google.com/search?q=flask+sqlalchemy+tutorial|200|Allowed|Web Search Engines|CLEAN|GET|1062|20444|None|15
 Wed Jul 08 13:18:36 2026|192.168.1.127|erin@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|GET|477|49958|None|13
 Wed Jul 08 13:21:35 2026|192.168.1.146|bob@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|903|45531|None|1
+Wed Jul 08 13:22:06 2026|10.1.1.60|erin@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|459|1371|Trojan|84
 Wed Jul 08 13:50:25 2026|192.168.1.115|carol@company.com|https://stackoverflow.com/questions/312443/how-do-i-parse-a-string-to-a-float|200|Allowed|General Surfing|CLEAN|GET|698|46494|None|7
-Wed Jul 08 14:00:11 2026|192.168.1.119|erin@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|405|785|Trojan|84
 Wed Jul 08 14:38:44 2026|192.168.1.122|dave@company.com|https://github.com/psf/requests/issues|200|Allowed|General Surfing|CLEAN|GET|1015|21715|None|9
 Wed Jul 08 14:43:07 2026|192.168.1.136|erin@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|1488|2546|None|15
+Wed Jul 08 14:46:52 2026|192.168.1.119|bob@company.com|https://www.google.com/search?q=zscaler+nss+feed+format|200|Allowed|Web Search Engines|CLEAN|GET|604|12170|None|4
 Wed Jul 08 14:55:49 2026|192.168.1.113|frank@company.com|https://github.com/psf/requests/issues|200|Allowed|General Surfing|CLEAN|GET|953|29436|None|12
 Wed Jul 08 15:06:00 2026|192.168.1.116|carol@company.com|https://github.com/torvalds/linux|200|Allowed|General Surfing|CLEAN|GET|1262|37368|None|7
 Wed Jul 08 15:26:49 2026|192.168.1.131|frank@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|1492|43221|None|10
-Wed Jul 08 15:36:25 2026|192.168.1.136|carol@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|258|228725032|None|20
 Wed Jul 08 15:41:50 2026|192.168.1.131|bob@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|GET|1278|6924|None|13
 Wed Jul 08 15:58:05 2026|192.168.1.117|frank@company.com|https://www.google.com/search?q=flask+sqlalchemy+tutorial|200|Allowed|Web Search Engines|CLEAN|GET|902|30640|None|6
 Wed Jul 08 16:22:35 2026|192.168.1.127|carol@company.com|https://www.google.com/search?q=zscaler+nss+feed+format|200|Allowed|Web Search Engines|CLEAN|GET|1312|25683|None|12
-Wed Jul 08 16:28:02 2026|192.168.1.113|carol@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|346|140597321|None|40
 Wed Jul 08 16:29:06 2026|192.168.1.140|carol@company.com|https://github.com/torvalds/linux|200|Allowed|General Surfing|CLEAN|GET|1047|3796|None|7
 Wed Jul 08 16:32:09 2026|192.168.1.113|dave@company.com|https://www.google.com/search?q=zscaler+nss+feed+format|200|Allowed|Web Search Engines|CLEAN|GET|903|47613|None|2
-Wed Jul 08 16:33:42 2026|192.168.1.129|alice@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|312|2118|Trojan|99
 Wed Jul 08 16:38:45 2026|192.168.1.137|bob@company.com|https://stackoverflow.com/questions/509211/understanding-slice-notation|200|Allowed|General Surfing|CLEAN|GET|286|48432|None|11
 Wed Jul 08 16:57:53 2026|192.168.1.122|carol@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|POST|1102|31056|None|9
-Thu Jul 09 03:55:58 2026|10.1.1.77|admin@company.com|http://malware.com/callback|200|Allowed|Spyware Callback|CLEAN|POST|569|252|None|49
 Thu Jul 09 10:08:20 2026|192.168.1.114|dave@company.com|https://stackoverflow.com/questions/509211/understanding-slice-notation|200|Allowed|General Surfing|CLEAN|GET|905|9210|None|5
+Thu Jul 09 10:25:55 2026|10.1.1.65|carol@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|373|179477796|None|30
 Thu Jul 09 10:27:38 2026|192.168.1.121|erin@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|363|22290|None|9
 Thu Jul 09 10:43:49 2026|192.168.1.118|alice@company.com|https://ec2.amazonaws.com/?Action=DescribeInstances&Version=2016-11-15|200|Allowed|Software Downloads|CLEAN|POST|523|27467|None|15
+Thu Jul 09 10:55:20 2026|10.1.1.65|erin@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|419|273920805|None|32
 Thu Jul 09 11:36:40 2026|192.168.1.127|frank@company.com|https://stackoverflow.com/questions/312443/how-do-i-parse-a-string-to-a-float|200|Allowed|General Surfing|CLEAN|GET|354|42325|None|2
 Thu Jul 09 11:47:24 2026|192.168.1.130|carol@company.com|https://www.google.com/search?q=zscaler+nss+feed+format|200|Allowed|Web Search Engines|CLEAN|GET|831|29946|None|11
 Thu Jul 09 11:48:34 2026|192.168.1.140|bob@company.com|https://github.com/torvalds/linux|200|Allowed|General Surfing|CLEAN|GET|495|31144|None|1
@@ -115,10 +115,12 @@ Thu Jul 09 12:20:24 2026|192.168.1.127|dave@company.com|https://github.com/psf/r
 Thu Jul 09 12:31:35 2026|192.168.1.131|carol@company.com|https://stackoverflow.com/questions/509211/understanding-slice-notation|200|Allowed|General Surfing|CLEAN|POST|1204|31000|None|5
 Thu Jul 09 12:35:20 2026|192.168.1.128|dave@company.com|https://stackoverflow.com/questions/509211/understanding-slice-notation|200|Allowed|General Surfing|CLEAN|GET|935|21012|None|8
 Thu Jul 09 12:48:18 2026|192.168.1.130|carol@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|GET|383|43549|None|7
+Thu Jul 09 12:54:06 2026|10.1.1.60|carol@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|484|2005|Trojan|83
+Thu Jul 09 13:07:25 2026|10.1.1.65|alice@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|366|166136855|None|39
 Thu Jul 09 13:29:04 2026|192.168.1.113|bob@company.com|https://stackoverflow.com/questions/509211/understanding-slice-notation|200|Allowed|General Surfing|CLEAN|GET|1151|14170|None|10
 Thu Jul 09 13:44:59 2026|192.168.1.133|dave@company.com|https://stackoverflow.com/questions/509211/understanding-slice-notation|200|Allowed|General Surfing|CLEAN|GET|205|48819|None|2
 Thu Jul 09 13:45:11 2026|192.168.1.110|frank@company.com|https://github.com/psf/requests/issues|200|Allowed|General Surfing|CLEAN|GET|1362|44997|None|6
-Thu Jul 09 13:50:17 2026|192.168.1.147|alice@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|380|256187208|None|22
+Thu Jul 09 14:05:27 2026|10.1.1.65|alice@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|324|236951026|None|38
 Thu Jul 09 14:05:34 2026|192.168.1.122|alice@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|1438|40313|None|1
 Thu Jul 09 14:15:24 2026|192.168.1.115|carol@company.com|https://github.com/torvalds/linux|200|Allowed|General Surfing|CLEAN|GET|402|47638|None|10
 Thu Jul 09 14:25:29 2026|192.168.1.147|frank@company.com|https://ec2.amazonaws.com/?Action=DescribeInstances&Version=2016-11-15|200|Allowed|Software Downloads|CLEAN|GET|250|32438|None|3
@@ -127,24 +129,21 @@ Thu Jul 09 14:54:04 2026|192.168.1.144|dave@company.com|https://github.com/torva
 Thu Jul 09 14:59:15 2026|192.168.1.110|carol@company.com|https://stackoverflow.com/questions/312443/how-do-i-parse-a-string-to-a-float|200|Allowed|General Surfing|CLEAN|GET|746|22402|None|9
 Thu Jul 09 15:05:43 2026|192.168.1.144|bob@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|GET|442|12496|None|12
 Thu Jul 09 15:10:52 2026|192.168.1.122|erin@company.com|https://www.google.com/search?q=flask+sqlalchemy+tutorial|200|Allowed|Web Search Engines|CLEAN|GET|306|42820|None|15
-Thu Jul 09 15:17:13 2026|192.168.1.142|alice@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|376|2260|Trojan|83
+Thu Jul 09 15:11:08 2026|10.1.1.65|dave@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|472|181769874|None|36
+Thu Jul 09 15:17:13 2026|10.1.1.60|erin@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|258|1913|Trojan|93
 Thu Jul 09 15:20:11 2026|192.168.1.139|erin@company.com|https://github.com/psf/requests/issues|200|Allowed|General Surfing|CLEAN|GET|741|40781|None|15
 Thu Jul 09 15:21:11 2026|192.168.1.141|frank@company.com|https://stackoverflow.com/questions/509211/understanding-slice-notation|200|Allowed|General Surfing|CLEAN|GET|1263|18279|None|2
 Thu Jul 09 15:49:05 2026|192.168.1.145|bob@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|979|11908|None|4
 Thu Jul 09 16:02:40 2026|192.168.1.134|carol@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|931|5227|None|11
 Thu Jul 09 16:31:10 2026|192.168.1.115|erin@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|GET|651|19942|None|1
 Thu Jul 09 16:40:11 2026|192.168.1.118|alice@company.com|https://stackoverflow.com/questions/509211/understanding-slice-notation|200|Allowed|General Surfing|CLEAN|GET|612|3670|None|6
-Thu Jul 09 16:48:36 2026|192.168.1.147|dave@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|489|292601805|None|40
-Thu Jul 09 16:55:13 2026|192.168.1.115|alice@company.com|https://www.google.com/search?q=flask+sqlalchemy+tutorial|200|Allowed|Web Search Engines|CLEAN|GET|1407|48641|None|12
-Fri Jul 10 03:14:51 2026|10.1.1.77|admin@company.com|http://malware.com/callback|200|Allowed|Spyware Callback|CLEAN|POST|419|774|None|59
-Fri Jul 10 03:19:22 2026|10.1.1.77|admin@company.com|http://malware.com/callback|200|Allowed|Spyware Callback|CLEAN|POST|253|791|None|56
+Fri Jul 10 03:35:21 2026|10.1.1.77|admin@company.com|http://malware.com/callback|200|Allowed|Spyware Callback|CLEAN|POST|543|325|None|53
 Fri Jul 10 09:02:02 2026|192.168.1.118|frank@company.com|https://github.com/psf/requests/issues|200|Allowed|General Surfing|CLEAN|GET|1263|30749|None|4
 Fri Jul 10 09:11:59 2026|192.168.1.130|alice@company.com|https://github.com/torvalds/linux|200|Allowed|General Surfing|CLEAN|GET|1015|5842|None|9
 Fri Jul 10 09:15:13 2026|192.168.1.114|alice@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|1424|44841|None|1
 Fri Jul 10 09:16:41 2026|192.168.1.133|frank@company.com|https://github.com/torvalds/linux|200|Allowed|General Surfing|CLEAN|GET|442|31300|None|9
 Fri Jul 10 09:35:29 2026|192.168.1.129|frank@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|GET|206|49677|None|6
 Fri Jul 10 09:38:09 2026|192.168.1.138|carol@company.com|https://github.com/psf/requests/issues|200|Allowed|General Surfing|CLEAN|GET|357|38412|None|4
-Fri Jul 10 09:38:59 2026|192.168.1.127|alice@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|292|1619|Trojan|89
 Fri Jul 10 09:46:29 2026|192.168.1.123|dave@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|341|27613|None|15
 Fri Jul 10 09:52:55 2026|192.168.1.111|alice@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|POST|1381|18144|None|6
 Fri Jul 10 09:53:54 2026|192.168.1.114|frank@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|GET|1044|9810|None|7
@@ -153,21 +152,22 @@ Fri Jul 10 10:02:27 2026|192.168.1.132|frank@company.com|https://www.google.com/
 Fri Jul 10 10:16:49 2026|192.168.1.126|frank@company.com|https://stackoverflow.com/questions/509211/understanding-slice-notation|200|Allowed|General Surfing|CLEAN|GET|1453|19515|None|15
 Fri Jul 10 10:17:49 2026|192.168.1.144|carol@company.com|https://ec2.amazonaws.com/?Action=DescribeInstances&Version=2016-11-15|200|Allowed|Software Downloads|CLEAN|GET|285|47919|None|14
 Fri Jul 10 10:51:55 2026|192.168.1.144|bob@company.com|https://github.com/psf/requests/issues|200|Allowed|General Surfing|CLEAN|GET|1137|8268|None|8
-Fri Jul 10 11:00:00 2026|10.1.1.50|-|https://portal.company.com/api/login|401|Allowed|General Surfing|CLEAN|POST|265|266|None|5
-Fri Jul 10 11:00:05 2026|10.1.1.50|-|https://portal.company.com/api/login|401|Allowed|General Surfing|CLEAN|POST|236|573|None|5
-Fri Jul 10 11:00:10 2026|10.1.1.50|-|https://portal.company.com/api/login|401|Allowed|General Surfing|CLEAN|POST|252|362|None|5
-Fri Jul 10 11:00:15 2026|10.1.1.50|-|https://portal.company.com/api/login|200|Allowed|General Surfing|CLEAN|POST|174|310|None|5
-Fri Jul 10 11:00:20 2026|10.1.1.50|-|https://portal.company.com/api/login|401|Allowed|General Surfing|CLEAN|POST|230|490|None|5
-Fri Jul 10 11:00:25 2026|10.1.1.50|-|https://portal.company.com/api/login|401|Allowed|General Surfing|CLEAN|POST|245|228|None|5
-Fri Jul 10 11:00:30 2026|10.1.1.50|-|https://portal.company.com/api/login|200|Allowed|General Surfing|CLEAN|POST|386|392|None|5
-Fri Jul 10 11:00:35 2026|10.1.1.50|-|https://portal.company.com/api/login|401|Allowed|General Surfing|CLEAN|POST|173|575|None|5
-Fri Jul 10 11:00:40 2026|10.1.1.50|-|https://portal.company.com/api/login|401|Allowed|General Surfing|CLEAN|POST|173|371|None|5
-Fri Jul 10 11:00:45 2026|10.1.1.50|-|https://portal.company.com/api/login|401|Allowed|General Surfing|CLEAN|POST|340|528|None|5
-Fri Jul 10 11:00:50 2026|10.1.1.50|-|https://portal.company.com/api/login|401|Allowed|General Surfing|CLEAN|POST|357|216|None|5
-Fri Jul 10 11:00:55 2026|10.1.1.50|-|https://portal.company.com/api/login|200|Allowed|General Surfing|CLEAN|POST|165|450|None|5
-Fri Jul 10 11:01:00 2026|10.1.1.50|-|https://portal.company.com/api/login|200|Allowed|General Surfing|CLEAN|POST|293|318|None|5
-Fri Jul 10 11:01:05 2026|10.1.1.50|-|https://portal.company.com/api/login|200|Allowed|General Surfing|CLEAN|POST|181|360|None|5
-Fri Jul 10 11:01:10 2026|10.1.1.50|-|https://portal.company.com/api/login|401|Allowed|General Surfing|CLEAN|POST|373|490|None|5
+Fri Jul 10 10:56:03 2026|10.1.1.60|bob@company.com|http://malicious-drop.example.net/payload.exe|403|Blocked|Software Downloads|Trojan.Generic|GET|280|3590|Trojan|99
+Fri Jul 10 11:00:00 2026|10.1.1.50|-|https://portal.company.com/api/login|401|Allowed|General Surfing|CLEAN|POST|305|225|None|5
+Fri Jul 10 11:00:05 2026|10.1.1.50|-|https://portal.company.com/api/login|401|Allowed|General Surfing|CLEAN|POST|182|290|None|5
+Fri Jul 10 11:00:10 2026|10.1.1.50|-|https://portal.company.com/api/login|200|Allowed|General Surfing|CLEAN|POST|312|449|None|5
+Fri Jul 10 11:00:15 2026|10.1.1.50|-|https://portal.company.com/api/login|200|Allowed|General Surfing|CLEAN|POST|332|316|None|5
+Fri Jul 10 11:00:20 2026|10.1.1.50|-|https://portal.company.com/api/login|401|Allowed|General Surfing|CLEAN|POST|302|421|None|5
+Fri Jul 10 11:00:25 2026|10.1.1.50|-|https://portal.company.com/api/login|401|Allowed|General Surfing|CLEAN|POST|266|408|None|5
+Fri Jul 10 11:00:30 2026|10.1.1.50|-|https://portal.company.com/api/login|200|Allowed|General Surfing|CLEAN|POST|260|200|None|5
+Fri Jul 10 11:00:35 2026|10.1.1.50|-|https://portal.company.com/api/login|200|Allowed|General Surfing|CLEAN|POST|179|586|None|5
+Fri Jul 10 11:00:40 2026|10.1.1.50|-|https://portal.company.com/api/login|200|Allowed|General Surfing|CLEAN|POST|316|599|None|5
+Fri Jul 10 11:00:45 2026|10.1.1.50|-|https://portal.company.com/api/login|200|Allowed|General Surfing|CLEAN|POST|334|593|None|5
+Fri Jul 10 11:00:50 2026|10.1.1.50|-|https://portal.company.com/api/login|401|Allowed|General Surfing|CLEAN|POST|260|381|None|5
+Fri Jul 10 11:00:55 2026|10.1.1.50|-|https://portal.company.com/api/login|401|Allowed|General Surfing|CLEAN|POST|255|323|None|5
+Fri Jul 10 11:01:00 2026|10.1.1.50|-|https://portal.company.com/api/login|401|Allowed|General Surfing|CLEAN|POST|252|362|None|5
+Fri Jul 10 11:01:05 2026|10.1.1.50|-|https://portal.company.com/api/login|200|Allowed|General Surfing|CLEAN|POST|174|310|None|5
+Fri Jul 10 11:01:10 2026|10.1.1.50|-|https://portal.company.com/api/login|401|Allowed|General Surfing|CLEAN|POST|230|490|None|5
 Fri Jul 10 11:02:15 2026|192.168.1.138|dave@company.com|https://ec2.amazonaws.com/?Action=DescribeInstances&Version=2016-11-15|200|Allowed|Software Downloads|CLEAN|GET|525|24648|None|11
 Fri Jul 10 11:20:55 2026|192.168.1.130|frank@company.com|https://github.com/psf/requests/issues|200|Allowed|General Surfing|CLEAN|POST|467|25083|None|3
 Fri Jul 10 11:20:59 2026|192.168.1.149|carol@company.com|https://www.google.com/search?q=flask+sqlalchemy+tutorial|200|Allowed|Web Search Engines|CLEAN|GET|1462|49252|None|9
@@ -180,18 +180,18 @@ Fri Jul 10 12:27:06 2026|192.168.1.125|carol@company.com|https://www.google.com/
 Fri Jul 10 12:28:37 2026|192.168.1.137|dave@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|GET|621|19041|None|2
 Fri Jul 10 12:36:34 2026|192.168.1.119|bob@company.com|https://github.com/psf/requests/issues|200|Allowed|General Surfing|CLEAN|GET|1104|8417|None|6
 Fri Jul 10 12:45:09 2026|192.168.1.128|dave@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|GET|692|38199|None|13
-Fri Jul 10 12:57:49 2026|192.168.1.132|carol@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|275|183422936|None|23
 Fri Jul 10 14:01:23 2026|192.168.1.129|bob@company.com|https://github.com/torvalds/linux|200|Allowed|General Surfing|CLEAN|GET|1195|13383|None|7
 Fri Jul 10 14:03:06 2026|192.168.1.137|bob@company.com|https://www.google.com/search?q=zscaler+nss+feed+format|200|Allowed|Web Search Engines|CLEAN|GET|1457|39833|None|12
+Fri Jul 10 14:04:25 2026|10.1.1.65|frank@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|221|237096807|None|20
 Fri Jul 10 14:25:20 2026|192.168.1.127|bob@company.com|https://www.google.com/search?q=zscaler+nss+feed+format|200|Allowed|Web Search Engines|CLEAN|GET|581|33505|None|12
 Fri Jul 10 14:32:53 2026|192.168.1.142|erin@company.com|https://stackoverflow.com/questions/509211/understanding-slice-notation|200|Allowed|General Surfing|CLEAN|GET|813|31922|None|0
-Fri Jul 10 14:55:40 2026|192.168.1.130|bob@company.com|https://s3.amazonaws.com/company-backups/database_dump.tar.gz|200|Allowed|Software Downloads|CLEAN|GET|425|138330453|None|35
 Fri Jul 10 15:05:49 2026|192.168.1.149|carol@company.com|https://github.com/torvalds/linux|200|Allowed|General Surfing|CLEAN|GET|368|18361|None|4
 Fri Jul 10 15:15:55 2026|192.168.1.120|carol@company.com|https://s3.amazonaws.com/company-assets/reports/q2-summary.pdf|200|Allowed|Software Downloads|CLEAN|GET|588|11242|None|15
 Fri Jul 10 15:17:40 2026|192.168.1.113|alice@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|GET|944|34425|None|5
 Fri Jul 10 15:26:35 2026|192.168.1.143|bob@company.com|https://stackoverflow.com/questions/312443/how-do-i-parse-a-string-to-a-float|200|Allowed|General Surfing|CLEAN|GET|616|22444|None|2
 Fri Jul 10 15:26:38 2026|192.168.1.118|erin@company.com|https://stackoverflow.com/questions/312443/how-do-i-parse-a-string-to-a-float|200|Allowed|General Surfing|CLEAN|GET|1196|42448|None|5
 Fri Jul 10 15:29:14 2026|192.168.1.135|frank@company.com|https://www.google.com/search?q=flask+sqlalchemy+tutorial|200|Allowed|Web Search Engines|CLEAN|GET|1085|26724|None|0
+Fri Jul 10 15:29:37 2026|192.168.1.145|frank@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|GET|1370|43518|None|6
 Fri Jul 10 15:34:32 2026|192.168.1.136|erin@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|GET|936|46782|None|2
 Fri Jul 10 15:39:40 2026|192.168.1.111|dave@company.com|https://lambda.us-east-1.amazonaws.com/2015-03-31/functions|200|Allowed|Software Downloads|CLEAN|GET|818|32450|None|7
 Fri Jul 10 16:05:57 2026|192.168.1.142|dave@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|GET|1251|28025|None|14

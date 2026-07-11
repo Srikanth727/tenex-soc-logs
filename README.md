@@ -122,6 +122,7 @@ All routes except `/health`, `/api/auth/signup`, and `/api/auth/login` require
 | GET | `/api/logs/:id/entries` | Paginated parsed entries (`?page=&per_page=`, max 1000/page) |
 | GET | `/api/logs/:id/timeline` | Hourly request counts, `[{timestamp, count}, ...]` |
 | GET | `/api/logs/:id/anomalies` | Detected anomalies for the log, joined with their source entry |
+| GET | `/api/logs/:id/chains` | Anomalies correlated into attack chains by shared source IP/user (see [Attack chain reconstruction](#attack-chain-reconstruction)) |
 
 Example:
 
@@ -160,7 +161,7 @@ outside business hours (before 8am or after 6pm, configurable in `rules.yaml`).
 Example in `sample_logs/suspicious.log`: `admin@company.com` reaching
 `Spyware Callback`-categorized `malware.com` at 3am.
 
-### 3. Threat Detected — `T1566` Phishing (severity: critical)
+### 3. Threat Detected — `T1189` Drive-by Compromise (severity: critical)
 
 Flags any entry where `threatname` is present and isn't `CLEAN`/`NONE` — i.e.
 Zscaler's own threat engine already flagged the request, regardless of whether the
@@ -171,20 +172,53 @@ proxy action was `Allowed` or `Blocked`. Example: `threatname=Trojan.Generic`,
 
 Flags any entry with `respsize` over the configured threshold (100MB by default).
 
+## Attack chain reconstruction
+
+A flat table of dozens of anomalies hides the story a SOC analyst actually wants:
+which events are part of the *same* incident. `GET /api/logs/:id/chains`
+(`backend/app/detection/chains.py`) correlates a log file's anomalies into chains:
+
+- **Grouped by source IP first (primary)** — any IP with 2+ anomalies becomes a chain.
+- **Anomalies left over** from IPs that only had a single hit are then **grouped by
+  user login (secondary)**, excluding placeholder/unauthenticated logins (`-`,
+  empty) — this catches an attacker who rotates IPs but reuses the same compromised
+  account, which IP-only grouping would miss. A given anomaly is never double-counted
+  across both groupings.
+- A group needs **2+ anomalies to count as a chain**; singletons stay out of this
+  endpoint's response (they're still visible in the flat `/anomalies` list).
+- For each chain, `chain_synthesis` is a 1-2 sentence narrative connecting the events
+  into an attack-chain story, generated the same optional way as
+  [anomaly explanations](#ai-usage) — Claude/Ollama per `LLM_MODE`, falling back to a
+  templated summary (never blank) if the LLM is unavailable or misconfigured.
+- The frontend's `ChainList` component renders chains above the flat `AnomalyTable`,
+  color-coded by the chain's highest-severity anomaly, and hides itself entirely if
+  the log has no 2+-anomaly groups.
+- **Not cached or persisted** — chains (and their LLM synthesis) are recomputed on
+  every request. Repeatedly viewing the same log re-invokes the LLM per chain; if
+  that cost/latency matters for your use case, this is the first thing to add
+  caching around.
+
 ## AI usage
 
 - **Detection is deterministic, not AI.** All four rules above are plain Python/YAML
   logic — no model is in the loop for flagging anomalies. This keeps detection fast,
   free, reproducible, and auditable.
-- **Explanations are optional and LLM-generated.** `backend/app/detection/llm_explainer.py`
-  can turn an anomaly's structured context into a 2–3 sentence plain-English
-  explanation for the dashboard, toggled by `LLM_MODE`:
+- **Explanations and chain narratives are optional and LLM-generated.**
+  `backend/app/detection/llm_explainer.py` has two entry points, both toggled by the
+  same `LLM_MODE`:
+  - `explain_anomaly()` can turn a single anomaly's structured context into a 2–3
+    sentence plain-English explanation (not currently wired into any route — see
+    its docstring).
+  - `synthesize_chain()` turns an ordered list of correlated anomalies (see
+    [Attack chain reconstruction](#attack-chain-reconstruction)) into a 1-2 sentence
+    attack-chain narrative — this one *is* wired in, via `GET /api/logs/:id/chains`.
   - `LLM_MODE=hosted` calls the Claude API (`anthropic` library) with `LLM_API_KEY`.
   - `LLM_MODE=ollama` calls a local Ollama server (`llama3.2` by default) at
     `OLLAMA_BASE_URL` — no API key or external network call required.
-  - On any failure (missing key, network error, Ollama not running) `explain_anomaly`
-    returns `None` and the caller falls back to the rule's static YAML description —
-    the app is fully usable with the LLM turned off or misconfigured.
+  - On any failure (missing/invalid key, network error, Ollama not running),
+    `explain_anomaly` returns `None` (caller falls back to the rule's static YAML
+    description) and `synthesize_chain` returns a templated summary instead (never
+    blank) — the app is fully usable with the LLM turned off or misconfigured.
 
 ## RBAC
 

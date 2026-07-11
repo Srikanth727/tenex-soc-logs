@@ -143,3 +143,24 @@ export function useAuthUser(): AuthUser | null {
     }
   }, [raw]);
 }
+
+function subscribeNever(): () => void {
+  return () => {};
+}
+
+function getMountedTrue(): boolean {
+  return true;
+}
+
+function getMountedFalse(): boolean {
+  return false;
+}
+
+/** True only once the client has hydrated. Server rendering can't know
+ * about localStorage, so a component gated on auth (e.g. the login page)
+ * should render nothing/a loading state while this is false — otherwise the
+ * server-rendered HTML briefly shows the wrong screen before hydration
+ * corrects it. */
+export function useHasMounted(): boolean {
+  return useSyncExternalStore(subscribeNever, getMountedTrue, getMountedFalse);
+}

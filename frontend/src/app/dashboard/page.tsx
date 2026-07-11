@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import Upload from "@/components/Upload";
 import LogList from "@/components/LogList";
 import Timeline from "@/components/Timeline";
+import ChainList from "@/components/ChainList";
 import AnomalyTable from "@/components/AnomalyTable";
 
 export interface LogFileSummary {
@@ -50,6 +51,7 @@ export default function DashboardPage() {
           {selectedLogId ? (
             <>
               <Timeline key={`timeline-${selectedLogId}`} logId={selectedLogId} />
+              <ChainList key={`chains-${selectedLogId}`} logId={selectedLogId} />
               <AnomalyTable key={`anomalies-${selectedLogId}`} logId={selectedLogId} />
             </>
           ) : (

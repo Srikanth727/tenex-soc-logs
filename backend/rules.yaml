@@ -26,11 +26,11 @@ rules:
       - "Spyware Callback"
 
   - name: threat_detected
-    mitre_tag: T1566
+    mitre_tag: T1189
     severity: critical
     description: >-
       Zscaler flagged a known threat signature on this request, indicating a
-      likely phishing or malware delivery attempt.
+      likely drive-by compromise or malware delivery attempt.
 
   - name: large_data_transfer
     mitre_tag: T1041
