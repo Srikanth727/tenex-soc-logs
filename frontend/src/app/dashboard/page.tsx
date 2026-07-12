@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useIsAuthenticated } from "@/lib/auth";
+import { useHasMounted, useIsAuthenticated } from "@/lib/auth";
 import { apiFetch } from "@/lib/api";
 import Navbar from "@/components/Navbar";
 import Upload from "@/components/Upload";
@@ -55,23 +55,29 @@ function useAllAnomalies(logId: number | null) {
 
 export default function DashboardPage() {
   const router = useRouter();
+  const hasMounted = useHasMounted();
   const authenticated = useIsAuthenticated();
   const [selectedLogId, setSelectedLogId] = useState<number | null>(null);
   const [refreshSignal, setRefreshSignal] = useState(0);
   const allAnomalies = useAllAnomalies(selectedLogId);
 
   useEffect(() => {
-    if (!authenticated) {
+    if (hasMounted && !authenticated) {
       router.replace("/");
     }
-  }, [authenticated, router]);
+  }, [hasMounted, authenticated, router]);
 
   const handleUploaded = useCallback((log: LogFileSummary) => {
     setSelectedLogId(log.id);
     setRefreshSignal((n) => n + 1);
   }, []);
 
-  if (!authenticated) {
+  // Mirrors the login page's guard: server rendering can't know whether a
+  // valid session exists, so useIsAuthenticated() reports its SSR/hydration
+  // snapshot (false) for one render even when a valid token exists — without
+  // waiting for hasMounted, that transient false fires the redirect above
+  // before the real client value lands, bouncing to "/" and back.
+  if (!hasMounted || !authenticated) {
     return null;
   }
 
