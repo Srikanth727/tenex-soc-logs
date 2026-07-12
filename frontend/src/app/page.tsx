@@ -3,27 +3,34 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ApiError, login, useAuthUser, useHasMounted } from "@/lib/auth";
+import { ApiError, login, useHasMounted, useIsAuthenticated } from "@/lib/auth";
 
 export default function LoginPage() {
   const router = useRouter();
   const hasMounted = useHasMounted();
-  const user = useAuthUser();
+  // Must match dashboard's own check (JWT expiry via useIsAuthenticated), not
+  // just whether a "user" object happens to sit in localStorage. Those two
+  // notions of "logged in" can disagree once the token expires but nothing
+  // has cleared the stale user object yet (e.g. after long inactivity) — in
+  // that case this page saw "logged in" while dashboard saw "expired",
+  // bouncing between "/" and "/dashboard" forever since neither side's
+  // condition ever changed.
+  const authenticated = useIsAuthenticated();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (hasMounted && user) {
+    if (hasMounted && authenticated) {
       router.replace("/dashboard");
     }
-  }, [hasMounted, user, router]);
+  }, [hasMounted, authenticated, router]);
 
   // Server rendering can't know whether a valid session exists, so default to
   // a blank screen until the client has hydrated and checked — this avoids
   // flashing the login form for an already-logged-in user on reload.
-  if (!hasMounted || user) {
+  if (!hasMounted || authenticated) {
     return <div className="flex flex-1 bg-black" />;
   }
 
