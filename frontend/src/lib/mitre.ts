@@ -2,21 +2,15 @@
 // produces. No mapping like this exists in the backend — these are display
 // labels only, kept here so ThreatTypeChart and ChainList stay consistent.
 interface TechniqueMeta {
-  chainIcon: string;
   chainTitle: string;
 }
 
 const MITRE_TECHNIQUES: Record<string, TechniqueMeta> = {
-  T1110: { chainIcon: "\u{1F511}", chainTitle: "Brute Force Attack" },
-  T1133: { chainIcon: "\u{1F310}", chainTitle: "External Remote Services Attack" },
-  T1189: { chainIcon: "\u{1F9A0}", chainTitle: "Drive-by Compromise" },
-  T1041: { chainIcon: "\u{1F4E4}", chainTitle: "Data Exfiltration" },
+  T1110: { chainTitle: "Brute Force Attack" },
+  T1133: { chainTitle: "External Remote Services Attack" },
+  T1189: { chainTitle: "Drive-by Compromise" },
+  T1041: { chainTitle: "Data Exfiltration" },
 };
-
-export function mitreChainIcon(tag: string | null): string {
-  if (!tag) return "⚠️";
-  return MITRE_TECHNIQUES[tag]?.chainIcon ?? "⚠️";
-}
 
 export function mitreChainTitle(tag: string | null): string {
   if (!tag) return "Correlated Anomalies";

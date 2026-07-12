@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { ApiError, apiFetch } from "@/lib/api";
 import { SEVERITY_BG_CLASS, isKnownSeverity } from "@/lib/severityColors";
-import { mitreChainIcon, mitreChainTitle } from "@/lib/mitre";
+import { mitreChainTitle } from "@/lib/mitre";
 
 interface ChainEvent {
   rule: string;
@@ -262,7 +262,6 @@ function ChainCard({ chain }: { chain: Chain }) {
       <button onClick={() => setExpanded((v) => !v)} className="flex w-full items-start justify-between gap-3 p-4 text-left">
         <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
-            <span className="mr-1">{mitreChainIcon(primaryTag)}</span>
             {mitreChainTitle(primaryTag)}
             {primaryTag && <span className="ml-1 font-normal text-zinc-400 dark:text-zinc-500">({primaryTag})</span>}
           </p>
