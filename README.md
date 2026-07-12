@@ -10,11 +10,12 @@ techniques, and review the results on a dashboard.
    dashboard.
 2. The Flask backend parses each line, sanitizes untrusted fields (URLs, usernames,
    etc.) against stored XSS, and stores structured `log_entries` rows in Postgres.
-3. Four YAML-configured detection rules run over the parsed entries and create
-   `anomalies` rows, each tagged with a MITRE ATT&CK technique, a severity, and a
-   confidence score.
-4. The dashboard shows an hourly request-volume timeline and a table of detected
-   anomalies for the selected log file.
+3. Five YAML-configured detection rules run over the parsed entries and create
+   `anomalies` rows, each tagged with a MITRE ATT&CK technique, a severity
+   (critical/high/medium/low), and a confidence score.
+4. The dashboard shows an hourly request-volume timeline, a severity-distribution
+   donut chart, a top-threat-types bar chart, attack chains, and a filterable,
+   triageable table of detected anomalies for the selected log file.
 
 ## Architecture
 
@@ -121,7 +122,8 @@ All routes except `/health`, `/api/auth/signup`, and `/api/auth/login` require
 | GET | `/api/logs` | List log files (own uploads for `analyst`, all uploads for `admin`) |
 | GET | `/api/logs/:id/entries` | Paginated parsed entries (`?page=&per_page=`, max 1000/page) |
 | GET | `/api/logs/:id/timeline` | Hourly request counts, `[{timestamp, count}, ...]` |
-| GET | `/api/logs/:id/anomalies` | Detected anomalies for the log, joined with their source entry |
+| GET | `/api/logs/:id/anomalies` | Detected anomalies for the log, joined with their source entry. Sorted by `occurred_at` descending (newest first) by default. Optional `?severity=critical,high,medium,low` and `?status=new,reviewed,dismissed` (comma-separated, both filters composable) narrow the results |
+| PATCH | `/api/anomalies/:id` | `{"status": "new"\|"reviewed"\|"dismissed"}` — updates an anomaly's triage status (analyst marking it reviewed/dismissed) and returns the updated row |
 | GET | `/api/logs/:id/chains` | Anomalies correlated into attack chains by shared source IP/user (see [Attack chain reconstruction](#attack-chain-reconstruction)) |
 
 Example:
@@ -142,6 +144,15 @@ curl -s -X POST http://localhost:8080/api/logs \
 Configured in `backend/rules.yaml`, implemented in `backend/app/detection/rules.py`.
 Each rule produces a confidence score (0–1) per flagged entry; the MITRE tag and
 severity are fixed per rule.
+
+Each anomaly row also carries two independent timestamps and a mutable triage
+status:
+- **`occurred_at`** — the source `LogEntry.timestamp`, i.e. when the attacker was
+  actually active.
+- **`detected_at`** — when this pipeline ran detection and created the row.
+- **`status`** — `new` (default), `reviewed`, or `dismissed`. Set via
+  `PATCH /api/anomalies/:id` as an analyst triages the anomaly table; see
+  [API reference](#api-reference).
 
 ### 1. High Request Volume — `T1110` Brute Force (severity: high)
 
@@ -172,6 +183,51 @@ proxy action was `Allowed` or `Blocked`. Example: `threatname=Trojan.Generic`,
 
 Flags any entry with `respsize` over the configured threshold (100MB by default).
 
+### 5. Repeated Failed Login Attempts — `T1110` Brute Force, unsuccessful (severity: low)
+
+The same per-IP z-score as rule 1, but for the *next tier down*: IPs with a z-score
+between 1.5 and 2.5 (elevated, but below rule 1's confirmed-brute-force threshold)
+**and** no successful response code anywhere in that IP's window (every response is
+4xx/failed auth — no `200`). This distinguishes "a pattern of failed attempts worth
+watching" from a confirmed compromise. Confidence is fixed at 0.6, lower than the
+other rules, since it's a behavioral signal rather than a confirmed hit.
+
+Deliberately shares its z-score population with rule 1 (`_ip_request_zscores` in
+`rules.py` is a single shared helper) so the two rules can never double-count the
+same IP — a z-score can't simultaneously be `> 2.5` (rule 1) and `1.5–2.5` (rule 5).
+Because rule 1 and rule 5 both tag `T1110`, the dashboard's `ThreatTypeChart` groups
+by `rule_name` rather than MITRE tag, so the two show as separate bars instead of
+merging.
+
+## Dashboard
+
+Once a log is selected, the dashboard (`frontend/src/app/dashboard/page.tsx`) renders,
+top to bottom:
+
+- **Timeline** (`Timeline.tsx`) — hourly request-volume bar chart with axis titles
+  and a per-bar hover tooltip showing the exact hour range and count (e.g.
+  "06:00–07:00 · 9 requests").
+- **SeverityChart** (`SeverityChart.tsx`) — a donut chart of the log's anomalies by
+  severity (critical/high/medium/low), with a legend showing count + percentage per
+  tier and a hover-to-highlight center readout.
+- **ThreatTypeChart** (`ThreatTypeChart.tsx`) — a horizontal bar chart of the top 5
+  MITRE-tagged rules by count, color-coded by severity. Grouped by `rule_name`
+  rather than MITRE tag specifically so that rules 1 and 5 above (both `T1110`, but
+  different severities) render as two distinct bars instead of merging.
+- **AnomalyTable** (`AnomalyTable.tsx`) with **FilterBar** (`FilterBar.tsx`) — the
+  flat, filterable anomaly list. Severity and status are each independent
+  multi-select pill filters (composed into the `?severity=` / `?status=` query
+  params above), defaulting to all severities and `status=new` respectively, with a
+  "Reset Filters" button. Each row shows `occurred_at`/`detected_at`, and has
+  "Mark Reviewed"/"Dismiss" buttons that `PATCH` the anomaly and refetch the
+  current filtered view (with a toast confirming the change).
+- **ChainList** — see [Attack chain reconstruction](#attack-chain-reconstruction).
+
+All severity colors (critical/high/medium/low, used by the donut, bar chart, chain
+dots, filter pills, and anomaly-table badges) are defined once in
+`frontend/src/lib/severityColors.ts` as the single source of truth, rather than each
+component picking its own hex values.
+
 ## Attack chain reconstruction
 
 A flat table of dozens of anomalies hides the story a SOC analyst actually wants:
@@ -190,17 +246,38 @@ which events are part of the *same* incident. `GET /api/logs/:id/chains`
   into an attack-chain story, generated the same optional way as
   [anomaly explanations](#ai-usage) — Claude/Ollama per `LLM_MODE`, falling back to a
   templated summary (never blank) if the LLM is unavailable or misconfigured.
-- The frontend's `ChainList` component renders chains above the flat `AnomalyTable`,
-  color-coded by the chain's highest-severity anomaly, and hides itself entirely if
-  the log has no 2+-anomaly groups.
 - **Not cached or persisted** — chains (and their LLM synthesis) are recomputed on
   every request. Repeatedly viewing the same log re-invokes the LLM per chain; if
   that cost/latency matters for your use case, this is the first thing to add
   caching around.
 
+The frontend's `ChainList` component (`frontend/src/components/ChainList.tsx`) renders
+chains above the flat `AnomalyTable`, color-coded by the chain's highest-severity
+anomaly, and hides itself entirely if the log has no 2+-anomaly groups. Each chain
+card:
+
+- Leads with the chain's dominant MITRE technique (icon + name + tag), with the
+  source IP/user as secondary metadata — not the IP as the primary heading.
+- Shows a compact horizontal strip with one dot per event, **spaced proportionally
+  to real elapsed time** (not evenly), so a mechanical, sub-minute cadence (e.g. a
+  script hitting an endpoint every 5 seconds) visually clusters instead of looking
+  evenly paced like a human would be. This strip is always visible, independent of
+  the card's expand state.
+- **Starts fully collapsed**: only a one-line summary (`rule ×N · MITRE · time
+  range · confidence`) and a "Show all N events" link are shown by default — every
+  chain behaves this way regardless of whether its events happen to form one long
+  consecutive run of the same rule or alternate between different rule types.
+  Expanding reveals the full list, which itself collapses consecutive
+  same-rule/same-technique runs into one summary row (`high_request_volume ×15 ·
+  ...`) with its own nested expand.
+- Date-qualifies event timestamps (`Jul 6, 06:17:28 AM`) whenever a chain's events
+  span more than one calendar day — chains group by IP/user regardless of *when*
+  events happened, so a chain can legitimately span days, and a bare time-of-day
+  display would make correctly-sorted cross-day events look shuffled.
+
 ## AI usage
 
-- **Detection is deterministic, not AI.** All four rules above are plain Python/YAML
+- **Detection is deterministic, not AI.** All five rules above are plain Python/YAML
   logic — no model is in the loop for flagging anomalies. This keeps detection fast,
   free, reproducible, and auditable.
 - **Explanations and chain narratives are optional and LLM-generated.**
@@ -242,8 +319,8 @@ promotion flow; change a user's role directly in the `users` table if needed.
   authenticated analyst can currently upload arbitrarily large files up to the 50MB
   cap; there's no per-user rate limiting or virus scanning of uploads.
 - **Detection is rule-based, not ML-based.** It will not catch anomalies outside the
-  four configured patterns, and thresholds (z-score 2.5, 100MB, business hours) are
-  static and shared across all uploads — a real deployment should make these
+  five configured patterns, and thresholds (z-score 1.5/2.5, 100MB, business hours)
+  are static and shared across all uploads — a real deployment should make these
   per-tenant configurable and probably add more rules over time.
 - **The `high_request_volume` rule is population-sensitive.** Because it's a z-score
   across IPs *within a single uploaded file*, a small file with few distinct IPs can
@@ -320,8 +397,8 @@ the parser expects:
 | File | Lines | Contents |
 |---|---|---|
 | `normal.log` | 100 | Clean traffic only — `action=Allowed`, `threatname=CLEAN`, business hours Mon–Fri, 3 users/IPs. Uploading it should produce **zero** anomalies. |
-| `suspicious.log` | 50 | One instance of each of the 4 anomaly types, plus filler traffic. |
-| `mixed.log` | 200 | ~80% normal / ~20% anomalous, blended across a realistic 8-hour spread, all 4 anomaly types represented. |
+| `suspicious.log` | 50 | One instance of each of rules 1–4, plus filler traffic. |
+| `mixed.log` | 157 | ~85% normal / ~15% anomalous, spread across 5 days (Jul 6–10). All 5 rules represented, including a dedicated `10.2.2.99` credential-stuffing block (rule 5, low severity) and a mixed critical/low chain on `10.1.1.60`. Uploading it currently produces 60 anomalies across all four severities and forms 5 attack chains. |
 
 Upload any of them from the dashboard's Upload widget, or via `curl` as shown in the
 [API reference](#api-reference).
