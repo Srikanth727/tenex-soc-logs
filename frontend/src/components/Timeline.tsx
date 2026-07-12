@@ -20,7 +20,7 @@ const MIN_CHART_HEIGHT = 160;
 const BAR_WIDTH = 20;
 const BAR_GAP = 2;
 
-function niceTicks(max: number, targetCount = 4): number[] {
+function niceTicks(max: number, targetCount = 6): number[] {
   if (max <= 0) return [0, 1];
   const rawStep = max / targetCount;
   const magnitude = Math.pow(10, Math.floor(Math.log10(rawStep)));
