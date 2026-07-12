@@ -43,23 +43,36 @@ function dotClass(severity: string | null): string {
   return isKnownSeverity(severity) ? SEVERITY_BG_CLASS[severity] : "bg-zinc-400 dark:bg-zinc-600";
 }
 
-// {time, period} split so a range spanning the same AM/PM can print it once
-// at the end ("07:00:00–07:01:10 AM") instead of on both sides.
-function formatClock(timestamp: string | null): { time: string; period: string } {
-  if (!timestamp) return { time: "unknown", period: "" };
-  const parts = new Date(timestamp)
+// {date, time, period} split so a range spanning the same AM/PM can print it
+// once at the end ("07:00:00–07:01:10 AM") instead of on both sides.
+function formatClock(timestamp: string | null): { date: string; time: string; period: string } {
+  if (!timestamp) return { date: "", time: "unknown", period: "" };
+  const d = new Date(timestamp);
+  const date = d.toLocaleDateString([], { month: "short", day: "numeric" });
+  const parts = d
     .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true })
     .split(" ");
-  return { time: parts[0], period: parts[1] ?? "" };
+  return { date, time: parts[0], period: parts[1] ?? "" };
 }
 
-function formatTimeRange(events: ChainEvent[]): string {
+// Chains built from anomalies spread across days (chains.py groups by IP/user
+// regardless of when they occurred) sort correctly by real timestamp, but a
+// time-only display like "05:11 AM" right after "07:55 AM" looks out of
+// order unless the date is shown too — this flags when that context matters.
+function spansMultipleDays(events: ChainEvent[]): boolean {
+  const dates = new Set(events.map((e) => formatClock(e.occurred_at).date));
+  return dates.size > 1;
+}
+
+function formatTimeRange(events: ChainEvent[], showDates: boolean): string {
   if (events.length === 0) return "";
   const first = formatClock(events[0].occurred_at);
   const last = formatClock(events[events.length - 1].occurred_at);
-  if (first.time === last.time) return `${first.time} ${first.period}`.trim();
-  if (first.period === last.period) return `${first.time}–${last.time} ${last.period}`.trim();
-  return `${first.time} ${first.period}–${last.time} ${last.period}`.trim();
+  const firstLabel = showDates ? `${first.date}, ${first.time}` : first.time;
+  const lastLabel = showDates ? `${last.date}, ${last.time}` : last.time;
+  if (firstLabel === lastLabel) return `${firstLabel} ${first.period}`.trim();
+  if (!showDates && first.period === last.period) return `${firstLabel}–${lastLabel} ${last.period}`.trim();
+  return `${firstLabel} ${first.period}–${lastLabel} ${last.period}`.trim();
 }
 
 interface EventGroup {
@@ -110,6 +123,24 @@ function primaryMitreTag(events: ChainEvent[]): string | null {
   return best;
 }
 
+// Same idea as primaryMitreTag, but the rule_name for the card's one-line
+// collapsed summary (a chain mixing rule types still needs a single label).
+function primaryRuleName(events: ChainEvent[]): string {
+  const counts = new Map<string, number>();
+  for (const e of events) {
+    counts.set(e.rule, (counts.get(e.rule) ?? 0) + 1);
+  }
+  let best = events[0]?.rule ?? "";
+  let bestCount = 0;
+  for (const [rule, count] of counts) {
+    if (count > bestCount) {
+      best = rule;
+      bestCount = count;
+    }
+  }
+  return best;
+}
+
 // Compact horizontal strip with dots placed proportionally to real elapsed
 // time (not evenly spaced) — tight clustering visually reinforces a
 // mechanical, non-human cadence the narrative text describes.
@@ -140,7 +171,8 @@ function ProportionalTimeline({ events }: { events: ChainEvent[] }) {
               className={`h-[9px] w-[9px] rounded-full shadow-sm ring-2 ring-white dark:ring-zinc-950 ${dotClass(e.severity)}`}
             />
             <div className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-1.5 hidden -translate-x-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-2 py-1 text-[11px] text-white shadow-lg group-hover:block dark:bg-zinc-100 dark:text-zinc-900">
-              {e.rule.replace(/_/g, " ")} &middot; {formatClock(e.occurred_at).time} {formatClock(e.occurred_at).period}
+              {e.rule.replace(/_/g, " ")} &middot; {formatClock(e.occurred_at).date}, {formatClock(e.occurred_at).time}{" "}
+              {formatClock(e.occurred_at).period}
             </div>
           </div>
         );
@@ -149,7 +181,7 @@ function ProportionalTimeline({ events }: { events: ChainEvent[] }) {
   );
 }
 
-function EventGroupRow({ group }: { group: EventGroup }) {
+function EventGroupRow({ group, showDates }: { group: EventGroup; showDates: boolean }) {
   const [expanded, setExpanded] = useState(false);
   const avgConfidence = averageConfidence(group.events);
 
@@ -163,8 +195,8 @@ function EventGroupRow({ group }: { group: EventGroup }) {
         />
         <span className="font-medium text-zinc-800 dark:text-zinc-200">{e.rule.replace(/_/g, " ")}</span>{" "}
         <span className="text-zinc-500 dark:text-zinc-400">
-          &middot; {e.mitre_tag ?? "—"} &middot; {clock.time} {clock.period} &middot;{" "}
-          {e.confidence != null ? `${Math.round(e.confidence * 100)}%` : "—"}
+          &middot; {e.mitre_tag ?? "—"} &middot; {showDates ? `${clock.date}, ` : ""}
+          {clock.time} {clock.period} &middot; {e.confidence != null ? `${Math.round(e.confidence * 100)}%` : "—"}
         </span>
       </li>
     );
@@ -179,7 +211,7 @@ function EventGroupRow({ group }: { group: EventGroup }) {
         {group.rule.replace(/_/g, " ")} &times;{group.events.length}
       </span>{" "}
       <span className="text-zinc-500 dark:text-zinc-400">
-        &middot; {group.mitre_tag ?? "—"} &middot; {formatTimeRange(group.events)} &middot;{" "}
+        &middot; {group.mitre_tag ?? "—"} &middot; {formatTimeRange(group.events, showDates)} &middot;{" "}
         {avgConfidence != null ? `${Math.round(avgConfidence * 100)}%` : "—"}
       </span>{" "}
       <button
@@ -196,6 +228,7 @@ function EventGroupRow({ group }: { group: EventGroup }) {
             return (
               <li key={i} className="relative text-xs text-zinc-500 dark:text-zinc-400">
                 <span className="absolute -left-[19px] top-1 h-1.5 w-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700" />
+                {showDates ? `${clock.date}, ` : ""}
                 {clock.time} {clock.period} &middot; {e.confidence != null ? `${Math.round(e.confidence * 100)}%` : "—"}
               </li>
             );
@@ -208,8 +241,19 @@ function EventGroupRow({ group }: { group: EventGroup }) {
 
 function ChainCard({ chain }: { chain: Chain }) {
   const [expanded, setExpanded] = useState(true);
+  // Individual event rows are always collapsed on first render — every
+  // chain, regardless of whether its groupConsecutive() runs happen to be
+  // long (one "×15" row) or short (many alternating size-1 rows), starts
+  // with just the one-line summary below and expands only on click.
+  const [eventsExpanded, setEventsExpanded] = useState(false);
   const groups = groupConsecutive(chain.anomalies);
   const primaryTag = primaryMitreTag(chain.anomalies);
+  const primaryRule = primaryRuleName(chain.anomalies);
+  const avgConfidence = averageConfidence(chain.anomalies);
+  // build_attack_chains groups by IP/user regardless of when events happened,
+  // so a chain can legitimately span several days (see chain_synthesis) —
+  // once it does, every timestamp needs a date or the list looks shuffled.
+  const showDates = spansMultipleDays(chain.anomalies);
 
   return (
     <div
@@ -226,7 +270,7 @@ function ChainCard({ chain }: { chain: Chain }) {
             {chain.entity_type === "ip" ? "Source IP" : "User account"}: {chain.entity_value}
             {" · "}
             {chain.anomalies_count} events{" · "}
-            {formatTimeRange(chain.anomalies)}
+            {formatTimeRange(chain.anomalies, showDates)}
           </p>
           <ProportionalTimeline events={chain.anomalies} />
         </div>
@@ -235,11 +279,29 @@ function ChainCard({ chain }: { chain: Chain }) {
 
       {expanded && (
         <div className="px-4 pb-4">
-          <ol className="flex flex-col gap-2 border-l-2 border-zinc-300 pl-4 dark:border-zinc-700">
-            {groups.map((group, i) => (
-              <EventGroupRow key={i} group={group} />
-            ))}
-          </ol>
+          <p className="text-sm">
+            <span className="font-medium text-zinc-800 dark:text-zinc-200">
+              {primaryRule.replace(/_/g, " ")} &times;{chain.anomalies_count}
+            </span>{" "}
+            <span className="text-zinc-500 dark:text-zinc-400">
+              &middot; {primaryTag ?? "—"} &middot; {formatTimeRange(chain.anomalies, showDates)} &middot;{" "}
+              {avgConfidence != null ? `${Math.round(avgConfidence * 100)}%` : "—"}
+            </span>{" "}
+            <button
+              onClick={() => setEventsExpanded((v) => !v)}
+              className="text-xs font-medium text-blue-600 hover:underline dark:text-blue-400"
+            >
+              {eventsExpanded ? "Hide events" : `Show all ${chain.anomalies_count} events`}
+            </button>
+          </p>
+
+          {eventsExpanded && (
+            <ol className="mt-2 flex flex-col gap-2 border-l-2 border-zinc-300 pl-4 dark:border-zinc-700">
+              {groups.map((group, i) => (
+                <EventGroupRow key={i} group={group} showDates={showDates} />
+              ))}
+            </ol>
+          )}
 
           <p className="mt-3 text-sm italic text-zinc-600 dark:text-zinc-400">{chain.chain_synthesis}</p>
         </div>

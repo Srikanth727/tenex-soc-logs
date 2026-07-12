@@ -85,8 +85,14 @@ export default function ThreatTypeChart({ anomalies }: ThreatTypeChartProps) {
                   card is always full-width in the dashboard, but a viewport
                   breakpoint doesn't track the *column's* actual width (same
                   class of bug the SeverityChart legend had), so a single
-                  fixed value is the correct choice here. */}
-              <div className="w-32 shrink-0 truncate text-xs font-medium text-zinc-600 dark:text-zinc-300">
+                  fixed value is the correct choice here. w-48 (not w-32) so
+                  the longest label — "T1110 Brute Force (Unsuccessful)" —
+                  fits without truncating; the title attribute is a fallback
+                  for anything that still doesn't fit at narrower widths. */}
+              <div
+                className="w-48 shrink-0 truncate text-xs font-medium text-zinc-600 dark:text-zinc-300"
+                title={`${b.tag ?? ""} ${ruleTechniqueName(b.ruleName)}`.trim()}
+              >
                 <span className="text-zinc-400 dark:text-zinc-500">{b.tag}</span> {ruleTechniqueName(b.ruleName)}
               </div>
               <div className="relative min-w-0 flex-1 rounded bg-zinc-100 dark:bg-zinc-900" style={{ height: BAR_HEIGHT }}>

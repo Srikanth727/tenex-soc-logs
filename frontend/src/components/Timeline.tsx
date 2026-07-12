@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import { ApiError, apiFetch } from "@/lib/api";
 
 interface TimelineBucket {
@@ -12,15 +12,10 @@ interface TimelineProps {
   logId: number;
 }
 
-// Floor for the bars area before it's been measured (and if the card ever
-// renders shorter than this for some reason) — actual height comes from
-// ResizeObserver below, so the chart fills whatever the grid row gives it
-// instead of leaving blank space when the SeverityChart sibling is taller.
-const MIN_CHART_HEIGHT = 160;
 const BAR_WIDTH = 20;
 const BAR_GAP = 2;
 
-function niceTicks(max: number, targetCount = 6): number[] {
+function niceTicks(max: number, targetCount = 4): number[] {
   if (max <= 0) return [0, 1];
   const rawStep = max / targetCount;
   const magnitude = Math.pow(10, Math.floor(Math.log10(rawStep)));
@@ -87,8 +82,6 @@ export default function Timeline({ logId }: TimelineProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hovered, setHovered] = useState<number | null>(null);
-  const barsAreaRef = useRef<HTMLDivElement>(null);
-  const [chartHeight, setChartHeight] = useState(MIN_CHART_HEIGHT);
 
   // Parent remounts this component (via `key={logId}`) whenever the selected
   // log changes, so state (including `loading`) already starts fresh — this
@@ -112,20 +105,6 @@ export default function Timeline({ logId }: TimelineProps) {
       cancelled = true;
     };
   }, [logId]);
-
-  // Measures the bars area's actual rendered height (it's flex-1, no fixed
-  // height) so the chart grows to fill the grid row instead of staying a
-  // fixed 160px and leaving blank space when SeverityChart is taller.
-  useEffect(() => {
-    const el = barsAreaRef.current;
-    if (!el) return;
-    const observer = new ResizeObserver((entries) => {
-      const h = entries[0]?.contentRect.height;
-      if (h) setChartHeight(Math.max(MIN_CHART_HEIGHT, h));
-    });
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
 
   const maxCount = useMemo(() => Math.max(1, ...buckets.map((b) => b.count)), [buckets]);
   const yTicks = useMemo(() => niceTicks(maxCount), [maxCount]);
@@ -154,29 +133,50 @@ export default function Timeline({ logId }: TimelineProps) {
     );
   }
 
+  // Below, y-title/y-ticks/bars-area are three siblings in one flex row and
+  // all stretch to the exact same height (plain CSS, no measurement) — that
+  // row only spans the bars, though, not the x-axis label/title text below
+  // them. So y-title/y-ticks each carry two invisible spacers (matching the
+  // x-axis rows' own classes exactly, so their rendered height always
+  // matches) to "push" their tick content up to align with the bars
+  // specifically, instead of the bars+labels+title stack as a whole.
   return (
     <ChartCard>
       <div className="flex min-h-0 flex-1 gap-3">
-        <div className="flex items-center">
+        <div className="flex flex-col">
           <span
-            className="shrink-0 whitespace-nowrap text-[10px] font-medium uppercase tracking-wide text-[#898781]"
+            className="flex flex-1 shrink-0 items-center whitespace-nowrap text-[10px] font-medium uppercase tracking-wide text-[#898781]"
             style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
           >
             Requests per hour
           </span>
-        </div>
-        <div className="flex flex-col justify-between text-xs text-[#898781] tabular-nums">
-          {yTicks
-            .slice()
-            .reverse()
-            .map((t) => (
-              <span key={t}>{t.toLocaleString()}</span>
-            ))}
+          <div aria-hidden className="mt-1 flex shrink-0 justify-center whitespace-nowrap text-[10px]">
+            &nbsp;
+          </div>
+          <p aria-hidden className="mt-1.5 shrink-0 text-center text-[10px]">
+            &nbsp;
+          </p>
         </div>
 
-        <div className="flex min-w-0 flex-1 flex-col overflow-x-auto">
+        <div className="flex flex-col text-xs text-[#898781] tabular-nums">
+          <div className="flex flex-1 flex-col justify-between">
+            {yTicks
+              .slice()
+              .reverse()
+              .map((t) => (
+                <span key={t}>{t.toLocaleString()}</span>
+              ))}
+          </div>
+          <div aria-hidden className="mt-1 flex shrink-0 justify-center whitespace-nowrap text-[10px]">
+            &nbsp;
+          </div>
+          <p aria-hidden className="mt-1.5 shrink-0 text-center text-[10px]">
+            &nbsp;
+          </p>
+        </div>
+
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-x-auto">
           <div
-            ref={barsAreaRef}
             className="relative flex flex-1 items-end border-b border-[#c3c2b7] dark:border-[#383835]"
             style={{ gap: BAR_GAP }}
           >
@@ -184,12 +184,12 @@ export default function Timeline({ logId }: TimelineProps) {
               <div
                 key={t}
                 className="pointer-events-none absolute left-0 right-0 border-t border-[#e1e0d9] dark:border-[#2c2c2a]"
-                style={{ bottom: (t / scaleMax) * chartHeight }}
+                style={{ bottom: `${(t / scaleMax) * 100}%` }}
               />
             ))}
 
             {buckets.map((b, i) => {
-              const barHeight = Math.max(2, (b.count / scaleMax) * chartHeight);
+              const barHeightPct = (b.count / scaleMax) * 100;
               return (
                 <div
                   key={b.timestamp ?? i}
@@ -212,7 +212,7 @@ export default function Timeline({ logId }: TimelineProps) {
                   <div
                     className="w-full rounded-t bg-[#2a78d6] transition-opacity dark:bg-[#3987e5]"
                     style={{
-                      height: barHeight,
+                      height: `max(2px, ${barHeightPct}%)`,
                       opacity: hovered === null || hovered === i ? 1 : 0.55,
                     }}
                   />

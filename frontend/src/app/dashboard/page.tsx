@@ -87,15 +87,14 @@ export default function DashboardPage() {
           {selectedLogId ? (
             <>
               {/* Default (stretch) alignment: both cells fill the row's full
-                  height. Timeline's own chart area grows to fill that height
-                  (see Timeline.tsx) instead of leaving blank space below a
-                  fixed-height chart, which is what caused the visible gap
-                  before the next section. */}
+                  height, and Timeline's bars area grows into that height via
+                  plain CSS flex stretch (see Timeline.tsx) — no gap below it
+                  before ThreatTypeChart starts. */}
               <div className="grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-3">
-                <div className="flex min-w-0 flex-col lg:col-span-2">
+                <div className="min-w-0 lg:col-span-2">
                   <Timeline key={`timeline-${selectedLogId}`} logId={selectedLogId} />
                 </div>
-                <div className="flex min-w-0 flex-col">
+                <div className="min-w-0">
                   <SeverityChart key={`severity-${selectedLogId}`} anomalies={allAnomalies} />
                 </div>
               </div>
