@@ -4,6 +4,16 @@ A full-stack tool for SOC analysts: upload Zscaler NSS Web Proxy logs, parse the
 structured records, run rule-based anomaly detection tagged with MITRE ATT&CK
 techniques, and review the results on a dashboard.
 
+## Live Deployment
+
+Full-stack application deployed on Railway:
+
+- **Frontend**: https://frontend-production-d4a3.up.railway.app
+- **Backend API**: https://tenex-soc-logs-production.up.railway.app
+
+Sign up for a new analyst account on the frontend to try it — there's no shared demo
+login. See [Setup](#setup) below to run the same stack locally instead.
+
 ## Overview
 
 1. An analyst uploads a pipe-delimited Zscaler NSS Web Proxy log file through the
