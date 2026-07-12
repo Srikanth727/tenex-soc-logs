@@ -94,3 +94,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+// Deployment trigger - testing live backend connectivity
