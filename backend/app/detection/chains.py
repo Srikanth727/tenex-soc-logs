@@ -17,7 +17,8 @@ def _anomaly_payload(anomaly: Anomaly, entry: LogEntry) -> dict:
         "mitre_tag": anomaly.mitre_tag,
         "confidence": anomaly.confidence_score,
         "severity": anomaly.severity,
-        "timestamp": entry.timestamp.isoformat() if entry.timestamp else None,
+        # when the attacker was active (LogEntry.timestamp), not when detection ran
+        "occurred_at": entry.timestamp.isoformat() if entry.timestamp else None,
         "explanation": anomaly.explanation,
     }
 

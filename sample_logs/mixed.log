@@ -198,3 +198,13 @@ Fri Jul 10 16:05:57 2026|192.168.1.142|dave@company.com|https://www.google.com/s
 Fri Jul 10 16:22:30 2026|192.168.1.116|dave@company.com|https://stackoverflow.com/questions/509211/understanding-slice-notation|200|Allowed|General Surfing|CLEAN|GET|814|3728|None|3
 Fri Jul 10 16:31:56 2026|192.168.1.129|dave@company.com|https://www.google.com/search?q=python+logging+best+practices|200|Allowed|Web Search Engines|CLEAN|GET|1005|33924|None|14
 Fri Jul 10 16:56:08 2026|192.168.1.142|dave@company.com|https://github.com/microsoft/vscode/pulls|200|Allowed|General Surfing|CLEAN|GET|430|22471|None|5
+Fri Jul 10 08:30:00 2026|10.2.2.99|user1@company.com|https://auth.company.com/login|401|Blocked|General Surfing|CLEAN|POST|650|0|None|15
+Fri Jul 10 08:30:30 2026|10.2.2.99|user2@company.com|https://auth.company.com/login|401|Blocked|General Surfing|CLEAN|POST|650|0|None|15
+Fri Jul 10 08:31:00 2026|10.2.2.99|admin@company.com|https://auth.company.com/login|401|Blocked|General Surfing|CLEAN|POST|650|0|None|15
+Fri Jul 10 08:31:30 2026|10.2.2.99|user1@company.com|https://auth.company.com/login|401|Blocked|General Surfing|CLEAN|POST|650|0|None|15
+Fri Jul 10 08:32:00 2026|10.2.2.99|user3@company.com|https://auth.company.com/login|401|Blocked|General Surfing|CLEAN|POST|650|0|None|15
+Fri Jul 10 08:32:30 2026|10.2.2.99|user2@company.com|https://auth.company.com/login|401|Blocked|General Surfing|CLEAN|POST|650|0|None|15
+Fri Jul 10 08:33:00 2026|10.2.2.99|admin@company.com|https://auth.company.com/login|401|Blocked|General Surfing|CLEAN|POST|650|0|None|15
+Fri Jul 10 08:33:30 2026|10.2.2.99|user1@company.com|https://auth.company.com/login|401|Blocked|General Surfing|CLEAN|POST|650|0|None|15
+Fri Jul 10 08:34:00 2026|10.2.2.99|user3@company.com|https://auth.company.com/login|401|Blocked|General Surfing|CLEAN|POST|650|0|None|15
+Fri Jul 10 08:34:30 2026|10.2.2.99|user2@company.com|https://auth.company.com/login|401|Blocked|General Surfing|CLEAN|POST|650|0|None|15

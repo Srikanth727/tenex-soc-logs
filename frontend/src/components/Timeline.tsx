@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { ApiError, apiFetch } from "@/lib/api";
 
 interface TimelineBucket {
@@ -12,7 +12,11 @@ interface TimelineProps {
   logId: number;
 }
 
-const CHART_HEIGHT = 160;
+// Floor for the bars area before it's been measured (and if the card ever
+// renders shorter than this for some reason) — actual height comes from
+// ResizeObserver below, so the chart fills whatever the grid row gives it
+// instead of leaving blank space when the SeverityChart sibling is taller.
+const MIN_CHART_HEIGHT = 160;
 const BAR_WIDTH = 20;
 const BAR_GAP = 2;
 
@@ -59,11 +63,21 @@ function formatFullLabel(timestamp: string | null): string {
   });
 }
 
+// Each bucket is the start of an hour (backend groups by date_trunc('hour', ...)),
+// so the tooltip's range is [bucket, bucket + 1h) — e.g. "06:00–07:00".
+function formatHourRange(timestamp: string | null): string {
+  if (!timestamp) return "Unknown time";
+  const start = new Date(timestamp);
+  const end = new Date(start.getTime() + 60 * 60 * 1000);
+  const fmt = (d: Date) => d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false });
+  return `${fmt(start)}–${fmt(end)}`;
+}
+
 function ChartCard({ children }: { children: ReactNode }) {
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950">
-      <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">Request volume by hour</h2>
-      <div className="mt-3">{children}</div>
+    <div className="flex h-full min-h-0 flex-col rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950">
+      <h2 className="shrink-0 text-sm font-semibold text-zinc-900 dark:text-zinc-50">Request volume by hour</h2>
+      <div className="mt-3 flex min-h-0 flex-1 flex-col">{children}</div>
     </div>
   );
 }
@@ -73,6 +87,8 @@ export default function Timeline({ logId }: TimelineProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hovered, setHovered] = useState<number | null>(null);
+  const barsAreaRef = useRef<HTMLDivElement>(null);
+  const [chartHeight, setChartHeight] = useState(MIN_CHART_HEIGHT);
 
   // Parent remounts this component (via `key={logId}`) whenever the selected
   // log changes, so state (including `loading`) already starts fresh — this
@@ -96,6 +112,20 @@ export default function Timeline({ logId }: TimelineProps) {
       cancelled = true;
     };
   }, [logId]);
+
+  // Measures the bars area's actual rendered height (it's flex-1, no fixed
+  // height) so the chart grows to fill the grid row instead of staying a
+  // fixed 160px and leaving blank space when SeverityChart is taller.
+  useEffect(() => {
+    const el = barsAreaRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver((entries) => {
+      const h = entries[0]?.contentRect.height;
+      if (h) setChartHeight(Math.max(MIN_CHART_HEIGHT, h));
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const maxCount = useMemo(() => Math.max(1, ...buckets.map((b) => b.count)), [buckets]);
   const yTicks = useMemo(() => niceTicks(maxCount), [maxCount]);
@@ -126,11 +156,16 @@ export default function Timeline({ logId }: TimelineProps) {
 
   return (
     <ChartCard>
-      <div className="flex gap-3">
-        <div
-          className="flex flex-col justify-between text-xs text-[#898781] tabular-nums"
-          style={{ height: CHART_HEIGHT }}
-        >
+      <div className="flex min-h-0 flex-1 gap-3">
+        <div className="flex items-center">
+          <span
+            className="shrink-0 whitespace-nowrap text-[10px] font-medium uppercase tracking-wide text-[#898781]"
+            style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
+          >
+            Requests per hour
+          </span>
+        </div>
+        <div className="flex flex-col justify-between text-xs text-[#898781] tabular-nums">
           {yTicks
             .slice()
             .reverse()
@@ -139,26 +174,27 @@ export default function Timeline({ logId }: TimelineProps) {
             ))}
         </div>
 
-        <div className="flex-1 overflow-x-auto">
+        <div className="flex min-w-0 flex-1 flex-col overflow-x-auto">
           <div
-            className="relative flex items-end border-b border-[#c3c2b7] dark:border-[#383835]"
-            style={{ height: CHART_HEIGHT, gap: BAR_GAP }}
+            ref={barsAreaRef}
+            className="relative flex flex-1 items-end border-b border-[#c3c2b7] dark:border-[#383835]"
+            style={{ gap: BAR_GAP }}
           >
             {yTicks.slice(1).map((t) => (
               <div
                 key={t}
                 className="pointer-events-none absolute left-0 right-0 border-t border-[#e1e0d9] dark:border-[#2c2c2a]"
-                style={{ bottom: (t / scaleMax) * CHART_HEIGHT }}
+                style={{ bottom: (t / scaleMax) * chartHeight }}
               />
             ))}
 
             {buckets.map((b, i) => {
-              const barHeight = Math.max(2, (b.count / scaleMax) * CHART_HEIGHT);
+              const barHeight = Math.max(2, (b.count / scaleMax) * chartHeight);
               return (
                 <div
                   key={b.timestamp ?? i}
-                  className="relative flex flex-shrink-0 flex-col items-center justify-end outline-none"
-                  style={{ width: BAR_WIDTH, height: CHART_HEIGHT }}
+                  className="relative flex h-full flex-shrink-0 flex-col items-center justify-end outline-none"
+                  style={{ width: BAR_WIDTH }}
                   tabIndex={0}
                   onMouseEnter={() => setHovered(i)}
                   onMouseLeave={() => setHovered(null)}
@@ -167,8 +203,10 @@ export default function Timeline({ logId }: TimelineProps) {
                 >
                   {hovered === i && (
                     <div className="absolute bottom-full z-10 mb-2 whitespace-nowrap rounded-md bg-zinc-900 px-2 py-1 text-xs text-white shadow-lg dark:bg-zinc-100 dark:text-zinc-900">
-                      <span className="font-semibold tabular-nums">{b.count.toLocaleString()}</span>{" "}
-                      <span className="opacity-70">{formatFullLabel(b.timestamp)}</span>
+                      <span className="font-semibold tabular-nums">{formatHourRange(b.timestamp)}</span>
+                      {" · "}
+                      <span className="tabular-nums">{b.count.toLocaleString()}</span> requests
+                      <div className="opacity-70">{formatFullLabel(b.timestamp)}</div>
                     </div>
                   )}
                   <div
@@ -183,17 +221,24 @@ export default function Timeline({ logId }: TimelineProps) {
             })}
           </div>
 
-          <div className="mt-1 flex" style={{ gap: BAR_GAP }}>
+          <div className="mt-1 flex shrink-0" style={{ gap: BAR_GAP }}>
             {buckets.map((b, i) => (
               <div
                 key={b.timestamp ?? i}
                 className="flex flex-shrink-0 justify-center whitespace-nowrap text-[10px] text-[#898781]"
                 style={{ width: BAR_WIDTH }}
               >
+                {/* Sparse-labeled by design (labelEvery): showing all 24 hours
+                    would overlap at typical bucket counts, so only every
+                    Nth tick renders — hovering any bar still shows its exact
+                    hour range via the tooltip above. */}
                 {i % step === 0 ? formatHourLabel(b.timestamp) : ""}
               </div>
             ))}
           </div>
+          <p className="mt-1.5 shrink-0 text-center text-[10px] font-medium uppercase tracking-wide text-[#898781]">
+            Hour of day (24-hour format)
+          </p>
         </div>
       </div>
     </ChartCard>

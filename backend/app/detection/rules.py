@@ -16,27 +16,60 @@ def _load_rules() -> dict:
     return {rule["name"]: rule for rule in config.get("rules", [])}
 
 
-def _detect_high_request_volume(entries, rule):
-    threshold = rule.get("zscore_threshold", 2.5)
+def _ip_request_zscores(entries) -> dict[str, float]:
+    """Per-IP request-count z-scores relative to the file's other source IPs.
+
+    Shared by high_request_volume and repeated_failed_login_attempts so both
+    rules agree on exactly what counts as "elevated" for a given IP — the
+    z_score_ceiling on the low-severity rule only avoids double-counting
+    because both compute z the same way.
+    """
     counts: dict[str, int] = {}
     for e in entries:
         if e.cip:
             counts[e.cip] = counts.get(e.cip, 0) + 1
 
     if len(counts) < 2:
-        return []
+        return {}
 
     values = list(counts.values())
     mean = statistics.mean(values)
     stdev = statistics.pstdev(values) or 1e-9
+    return {ip: (count - mean) / stdev for ip, count in counts.items()}
 
-    flagged_ips = {}
-    for ip, count in counts.items():
-        z = (count - mean) / stdev
-        if z > threshold:
-            flagged_ips[ip] = round(min(z / (threshold * 2), 1.0), 2)
+
+def _detect_high_request_volume(entries, rule):
+    threshold = rule.get("zscore_threshold", 2.5)
+    zscores = _ip_request_zscores(entries)
+
+    flagged_ips = {
+        ip: round(min(z / (threshold * 2), 1.0), 2) for ip, z in zscores.items() if z > threshold
+    }
 
     return [(e, flagged_ips[e.cip]) for e in entries if e.cip in flagged_ips]
+
+
+def _detect_repeated_failed_login_attempts(entries, rule):
+    threshold = rule.get("zscore_threshold", 1.5)
+    ceiling = rule.get("zscore_ceiling", 2.5)
+    confidence = rule.get("confidence", 0.6)
+    zscores = _ip_request_zscores(entries)
+
+    by_ip: dict[str, list] = {}
+    for e in entries:
+        if e.cip:
+            by_ip.setdefault(e.cip, []).append(e)
+
+    # z > ceiling is already claimed by high_request_volume; z <= threshold
+    # isn't elevated enough to be worth flagging at all.
+    flagged_ips = {
+        ip
+        for ip, z in zscores.items()
+        if threshold < z <= ceiling
+        and not any((e.respcode or "").strip().startswith("2") for e in by_ip.get(ip, []))
+    }
+
+    return [(e, confidence) for e in entries if e.cip in flagged_ips]
 
 
 def _detect_off_hours_risky_access(entries, rule):
@@ -78,6 +111,7 @@ RULE_DETECTORS = {
     "off_hours_risky_access": _detect_off_hours_risky_access,
     "threat_detected": _detect_threat_detected,
     "large_data_transfer": _detect_large_data_transfer,
+    "repeated_failed_login_attempts": _detect_repeated_failed_login_attempts,
 }
 
 

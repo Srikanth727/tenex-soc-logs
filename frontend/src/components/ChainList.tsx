@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { ApiError, apiFetch } from "@/lib/api";
+import { SEVERITY_BG_CLASS, isKnownSeverity } from "@/lib/severityColors";
+import { mitreChainIcon, mitreChainTitle } from "@/lib/mitre";
 
 interface ChainEvent {
   rule: string;
   mitre_tag: string | null;
   confidence: number | null;
   severity: string | null;
-  timestamp: string | null;
+  occurred_at: string | null;
   explanation: string | null;
 }
 
@@ -29,49 +31,204 @@ const SEVERITY_ACCENT: Record<string, string> = {
   critical: "border-l-red-500 bg-red-50/60 dark:bg-red-950/20",
   high: "border-l-orange-500 bg-orange-50/60 dark:bg-orange-950/20",
   medium: "border-l-yellow-500 bg-yellow-50/60 dark:bg-yellow-950/20",
-  low: "border-l-zinc-400 bg-zinc-50/60 dark:bg-zinc-900/40",
+  low: "border-l-green-500 bg-green-50/60 dark:bg-green-950/20",
 };
+const UNKNOWN_ACCENT = "border-l-zinc-400 bg-zinc-50/60 dark:bg-zinc-900/40";
 
 function accentClass(severity: string | null): string {
-  return SEVERITY_ACCENT[(severity ?? "").toLowerCase()] ?? SEVERITY_ACCENT.low;
+  return SEVERITY_ACCENT[(severity ?? "").toLowerCase()] ?? UNKNOWN_ACCENT;
 }
 
-function formatTime(timestamp: string | null): string {
-  if (!timestamp) return "unknown time";
-  return new Date(timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+function dotClass(severity: string | null): string {
+  return isKnownSeverity(severity) ? SEVERITY_BG_CLASS[severity] : "bg-zinc-400 dark:bg-zinc-600";
 }
 
-function formatTimeRange(anomalies: ChainEvent[]): string {
-  if (anomalies.length === 0) return "";
-  const first = formatTime(anomalies[0].timestamp);
-  const last = formatTime(anomalies[anomalies.length - 1].timestamp);
-  return first === last ? first : `${first}–${last}`;
+// {time, period} split so a range spanning the same AM/PM can print it once
+// at the end ("07:00:00–07:01:10 AM") instead of on both sides.
+function formatClock(timestamp: string | null): { time: string; period: string } {
+  if (!timestamp) return { time: "unknown", period: "" };
+  const parts = new Date(timestamp)
+    .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true })
+    .split(" ");
+  return { time: parts[0], period: parts[1] ?? "" };
 }
 
-const TIMELINE_PREVIEW_COUNT = 6;
+function formatTimeRange(events: ChainEvent[]): string {
+  if (events.length === 0) return "";
+  const first = formatClock(events[0].occurred_at);
+  const last = formatClock(events[events.length - 1].occurred_at);
+  if (first.time === last.time) return `${first.time} ${first.period}`.trim();
+  if (first.period === last.period) return `${first.time}–${last.time} ${last.period}`.trim();
+  return `${first.time} ${first.period}–${last.time} ${last.period}`.trim();
+}
+
+interface EventGroup {
+  rule: string;
+  mitre_tag: string | null;
+  severity: string | null;
+  events: ChainEvent[];
+}
+
+// Collapse consecutive anomalies sharing the same rule + technique into one
+// group, so a mechanical run (e.g. 25 near-identical brute-force hits)
+// renders as one summary row instead of ballooning the card.
+function groupConsecutive(events: ChainEvent[]): EventGroup[] {
+  const groups: EventGroup[] = [];
+  for (const e of events) {
+    const last = groups[groups.length - 1];
+    if (last && last.rule === e.rule && last.mitre_tag === e.mitre_tag) {
+      last.events.push(e);
+    } else {
+      groups.push({ rule: e.rule, mitre_tag: e.mitre_tag, severity: e.severity, events: [e] });
+    }
+  }
+  return groups;
+}
+
+function averageConfidence(events: ChainEvent[]): number | null {
+  const values = events.map((e) => e.confidence).filter((c): c is number => c != null);
+  if (values.length === 0) return null;
+  return values.reduce((sum, v) => sum + v, 0) / values.length;
+}
+
+// Most frequent MITRE technique in the chain represents it in the header —
+// an IP-grouped chain can mix rule types, but is usually dominated by one.
+function primaryMitreTag(events: ChainEvent[]): string | null {
+  const counts = new Map<string, number>();
+  for (const e of events) {
+    if (!e.mitre_tag) continue;
+    counts.set(e.mitre_tag, (counts.get(e.mitre_tag) ?? 0) + 1);
+  }
+  let best: string | null = null;
+  let bestCount = 0;
+  for (const [tag, count] of counts) {
+    if (count > bestCount) {
+      best = tag;
+      bestCount = count;
+    }
+  }
+  return best;
+}
+
+// Compact horizontal strip with dots placed proportionally to real elapsed
+// time (not evenly spaced) — tight clustering visually reinforces a
+// mechanical, non-human cadence the narrative text describes.
+function ProportionalTimeline({ events }: { events: ChainEvent[] }) {
+  const times = events
+    .map((e) => (e.occurred_at ? new Date(e.occurred_at).getTime() : null))
+    .filter((t): t is number => t != null);
+
+  if (times.length === 0) return null;
+
+  const minT = Math.min(...times);
+  const maxT = Math.max(...times);
+  const span = maxT - minT;
+
+  return (
+    <div className="relative mt-2 h-5 w-full">
+      <div className="absolute left-0 right-0 top-1/2 h-px -translate-y-1/2 bg-zinc-300 dark:bg-zinc-700" />
+      {events.map((e, i) => {
+        const t = e.occurred_at ? new Date(e.occurred_at).getTime() : null;
+        const pct = t == null ? 0 : span === 0 ? 50 : ((t - minT) / span) * 100;
+        return (
+          <div
+            key={i}
+            className="group absolute top-1/2 -translate-x-1/2 -translate-y-1/2"
+            style={{ left: `${pct}%` }}
+          >
+            <div
+              className={`h-[9px] w-[9px] rounded-full shadow-sm ring-2 ring-white dark:ring-zinc-950 ${dotClass(e.severity)}`}
+            />
+            <div className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-1.5 hidden -translate-x-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-2 py-1 text-[11px] text-white shadow-lg group-hover:block dark:bg-zinc-100 dark:text-zinc-900">
+              {e.rule.replace(/_/g, " ")} &middot; {formatClock(e.occurred_at).time} {formatClock(e.occurred_at).period}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function EventGroupRow({ group }: { group: EventGroup }) {
+  const [expanded, setExpanded] = useState(false);
+  const avgConfidence = averageConfidence(group.events);
+
+  if (group.events.length === 1) {
+    const e = group.events[0];
+    const clock = formatClock(e.occurred_at);
+    return (
+      <li className="relative text-sm">
+        <span
+          className={`absolute -left-[23px] top-1.5 h-[9px] w-[9px] rounded-full shadow-sm ${dotClass(e.severity)}`}
+        />
+        <span className="font-medium text-zinc-800 dark:text-zinc-200">{e.rule.replace(/_/g, " ")}</span>{" "}
+        <span className="text-zinc-500 dark:text-zinc-400">
+          &middot; {e.mitre_tag ?? "—"} &middot; {clock.time} {clock.period} &middot;{" "}
+          {e.confidence != null ? `${Math.round(e.confidence * 100)}%` : "—"}
+        </span>
+      </li>
+    );
+  }
+
+  return (
+    <li className="relative text-sm">
+      <span
+        className={`absolute -left-[23px] top-1.5 h-[9px] w-[9px] rounded-full shadow-sm ${dotClass(group.severity)}`}
+      />
+      <span className="font-medium text-zinc-800 dark:text-zinc-200">
+        {group.rule.replace(/_/g, " ")} &times;{group.events.length}
+      </span>{" "}
+      <span className="text-zinc-500 dark:text-zinc-400">
+        &middot; {group.mitre_tag ?? "—"} &middot; {formatTimeRange(group.events)} &middot;{" "}
+        {avgConfidence != null ? `${Math.round(avgConfidence * 100)}%` : "—"}
+      </span>{" "}
+      <button
+        onClick={() => setExpanded((v) => !v)}
+        className="text-xs font-medium text-blue-600 hover:underline dark:text-blue-400"
+      >
+        {expanded ? "Hide events" : `Show all ${group.events.length} events`}
+      </button>
+
+      {expanded && (
+        <ol className="mt-2 flex flex-col gap-1.5 border-l-2 border-zinc-200 pl-4 dark:border-zinc-800">
+          {group.events.map((e, i) => {
+            const clock = formatClock(e.occurred_at);
+            return (
+              <li key={i} className="relative text-xs text-zinc-500 dark:text-zinc-400">
+                <span className="absolute -left-[19px] top-1 h-1.5 w-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700" />
+                {clock.time} {clock.period} &middot; {e.confidence != null ? `${Math.round(e.confidence * 100)}%` : "—"}
+              </li>
+            );
+          })}
+        </ol>
+      )}
+    </li>
+  );
+}
 
 function ChainCard({ chain }: { chain: Chain }) {
   const [expanded, setExpanded] = useState(true);
-  const [showAllEvents, setShowAllEvents] = useState(false);
-
-  const hasMoreEvents = chain.anomalies.length > TIMELINE_PREVIEW_COUNT;
-  const visibleEvents = showAllEvents ? chain.anomalies : chain.anomalies.slice(0, TIMELINE_PREVIEW_COUNT);
+  const groups = groupConsecutive(chain.anomalies);
+  const primaryTag = primaryMitreTag(chain.anomalies);
 
   return (
     <div
       className={`rounded-lg border border-l-4 border-zinc-200 dark:border-zinc-800 ${accentClass(chain.highest_severity)}`}
     >
       <button onClick={() => setExpanded((v) => !v)} className="flex w-full items-start justify-between gap-3 p-4 text-left">
-        <div>
+        <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
-            Suspicious activity chain: {chain.entity_value}{" "}
-            <span className="font-normal text-zinc-500 dark:text-zinc-400">
-              ({chain.anomalies_count} correlated events, {formatTimeRange(chain.anomalies)})
-            </span>
+            <span className="mr-1">{mitreChainIcon(primaryTag)}</span>
+            {mitreChainTitle(primaryTag)}
+            {primaryTag && <span className="ml-1 font-normal text-zinc-400 dark:text-zinc-500">({primaryTag})</span>}
           </p>
-          <p className="mt-0.5 text-xs uppercase tracking-wide text-zinc-400">
-            {chain.entity_type === "ip" ? "Source IP" : "User account"}
+          <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
+            {chain.entity_type === "ip" ? "Source IP" : "User account"}: {chain.entity_value}
+            {" · "}
+            {chain.anomalies_count} events{" · "}
+            {formatTimeRange(chain.anomalies)}
           </p>
+          <ProportionalTimeline events={chain.anomalies} />
         </div>
         <span className="mt-0.5 shrink-0 text-zinc-400">{expanded ? "▾" : "▸"}</span>
       </button>
@@ -79,26 +236,10 @@ function ChainCard({ chain }: { chain: Chain }) {
       {expanded && (
         <div className="px-4 pb-4">
           <ol className="flex flex-col gap-2 border-l-2 border-zinc-300 pl-4 dark:border-zinc-700">
-            {visibleEvents.map((a, i) => (
-              <li key={i} className="relative text-sm">
-                <span className="absolute -left-[21px] top-1.5 h-2 w-2 rounded-full bg-zinc-400 dark:bg-zinc-600" />
-                <span className="font-medium text-zinc-800 dark:text-zinc-200">{a.rule.replace(/_/g, " ")}</span>{" "}
-                <span className="text-zinc-500 dark:text-zinc-400">
-                  &middot; {a.mitre_tag ?? "—"} &middot; {formatTime(a.timestamp)} &middot;{" "}
-                  {a.confidence != null ? `${Math.round(a.confidence * 100)}%` : "—"}
-                </span>
-              </li>
+            {groups.map((group, i) => (
+              <EventGroupRow key={i} group={group} />
             ))}
           </ol>
-
-          {hasMoreEvents && (
-            <button
-              onClick={() => setShowAllEvents((v) => !v)}
-              className="ml-4 mt-2 text-xs font-medium text-blue-600 hover:underline dark:text-blue-400"
-            >
-              {showAllEvents ? "Show fewer events" : `Show all ${chain.anomalies.length} events`}
-            </button>
-          )}
 
           <p className="mt-3 text-sm italic text-zinc-600 dark:text-zinc-400">{chain.chain_synthesis}</p>
         </div>

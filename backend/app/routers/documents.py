@@ -1,3 +1,7 @@
+# Log file lifecycle: upload a Zscaler NSS log, parse + persist its entries,
+# run anomaly detection, and expose the results (paginated entries, hourly
+# timeline, flat anomaly list, and IP/login-grouped attack chains).
+
 from flask import Blueprint, g, jsonify, request
 from sqlalchemy import func
 
@@ -13,8 +17,10 @@ from app.parsers.zscaler_nss import parse_zscaler_file
 documents_bp = Blueprint("documents", __name__)
 
 MAX_UPLOAD_BYTES = 50 * 1024 * 1024  # 50MB
+VALID_ANOMALY_STATUSES = {"new", "reviewed", "dismissed"}
 
 
+# Shape a LogFile row into the JSON returned by the upload/list-logs endpoints.
 def _serialize_log_file(lf: LogFile) -> dict:
     return {
         "id": lf.id,
@@ -25,6 +31,7 @@ def _serialize_log_file(lf: LogFile) -> dict:
     }
 
 
+# Shape a LogEntry row into the JSON returned by the entries/anomalies/chains endpoints.
 def _serialize_entry(e: LogEntry) -> dict:
     return {
         "id": e.id,
@@ -44,7 +51,35 @@ def _serialize_entry(e: LogEntry) -> dict:
     }
 
 
+# Shape an (Anomaly, LogEntry) pair into the JSON used by the anomalies list and the status-update endpoint.
+def _serialize_anomaly(a: Anomaly, e: LogEntry) -> dict:
+    return {
+        "id": a.id,
+        "rule_name": a.rule_name,
+        "mitre_tag": a.mitre_tag,
+        "confidence_score": a.confidence_score,
+        "explanation": a.explanation,
+        "severity": a.severity,
+        "status": a.status,
+        "occurred_at": e.timestamp.isoformat() if e.timestamp else None,
+        "detected_at": a.detected_at.isoformat() if a.detected_at else None,
+        "log_entry": _serialize_entry(e),
+    }
+
+
+# Parse an optional comma-separated query param into a list of trimmed values,
+# or None if absent/blank (meaning "no filter" to the caller).
+def _parse_csv_param(raw: str | None) -> list[str] | None:
+    if not raw:
+        return None
+    values = [v.strip() for v in raw.split(",") if v.strip()]
+    return values or None
+
+
+# Fetch a log file by id, scoped to the requesting user unless they're an admin.
 def _get_owned_log_file(db, log_id: int):
+    # Enforced here (not just at upload time) so analysts can't read another
+    # user's log file by guessing/incrementing the id; admins bypass the check.
     log_file = db.query(LogFile).filter(LogFile.id == log_id).first()
     if not log_file:
         return None
@@ -53,6 +88,8 @@ def _get_owned_log_file(db, log_id: int):
     return log_file
 
 
+# Accept a multipart log file upload, parse it, store the entries, and run
+# anomaly detection against them.
 @documents_bp.post("/logs")
 @require_role()
 def upload_log():
@@ -63,10 +100,14 @@ def upload_log():
     if not file.filename:
         return jsonify({"error": "empty filename"}), 400
 
+    # Read one byte past the cap so an oversized file can be rejected without
+    # buffering an unbounded upload fully into memory first.
     raw_bytes = file.read(MAX_UPLOAD_BYTES + 1)
     if len(raw_bytes) > MAX_UPLOAD_BYTES:
         return jsonify({"error": "file too large (max 50MB)"}), 413
 
+    # Zscaler feeds occasionally contain stray non-UTF-8 bytes; replace rather
+    # than reject so one bad byte doesn't fail an otherwise-valid upload.
     text = raw_bytes.decode("utf-8", errors="replace")
     parsed_entries = parse_zscaler_file(text)
     if not parsed_entries:
@@ -84,7 +125,7 @@ def upload_log():
 
     entries = [LogEntry(log_file_id=log_file.id, **fields) for fields in parsed_entries]
     db.add_all(entries)
-    db.flush()
+    db.flush()  # assigns entry ids so detect_anomalies can attach anomalies via log_entry_id
 
     anomaly_count = detect_anomalies(db, entries)
 
@@ -102,6 +143,7 @@ def upload_log():
     )
 
 
+# List uploaded log files: own uploads for analysts, all uploads for admins.
 @documents_bp.get("/logs")
 @require_role()
 def list_logs():
@@ -113,6 +155,7 @@ def list_logs():
     return jsonify([_serialize_log_file(lf) for lf in log_files])
 
 
+# Return a paginated page of parsed log entries for one log file.
 @documents_bp.get("/logs/<int:log_id>/entries")
 @require_role()
 def get_entries(log_id):
@@ -142,6 +185,7 @@ def get_entries(log_id):
     )
 
 
+# Return entry counts bucketed by hour, for the dashboard's timeline chart.
 @documents_bp.get("/logs/<int:log_id>/timeline")
 @require_role()
 def get_timeline(log_id):
@@ -150,9 +194,9 @@ def get_timeline(log_id):
     if not log_file:
         return jsonify({"error": "log file not found"}), 404
 
-    bucket = func.date_trunc("hour", LogEntry.timestamp)
+    bucket = func.date_trunc("hour", LogEntry.timestamp)  # hourly granularity for the dashboard timeline chart
     rows = (
-        db.query(bucket.label("bucket"), func.count(LogEntry.id))
+        db.query(bucket.label("bucket"), func.count(LogEntry.id))  # pylint: disable=not-callable
         .filter(LogEntry.log_file_id == log_id)
         .group_by(bucket)
         .order_by(bucket)
@@ -162,6 +206,9 @@ def get_timeline(log_id):
     return jsonify([{"timestamp": b.isoformat() if b else None, "count": c} for b, c in rows])
 
 
+# Return the flat list of detected anomalies for a log file, newest activity
+# first by default. Optional ?severity=critical,high and ?status=new,reviewed
+# query params (comma-separated) narrow the results.
 @documents_bp.get("/logs/<int:log_id>/anomalies")
 @require_role()
 def get_anomalies(log_id):
@@ -170,32 +217,28 @@ def get_anomalies(log_id):
     if not log_file:
         return jsonify({"error": "log file not found"}), 404
 
-    rows = (
+    severity_filter = _parse_csv_param(request.args.get("severity"))
+    status_filter = _parse_csv_param(request.args.get("status"))
+
+    query = (
         db.query(Anomaly, LogEntry)
         .join(LogEntry, Anomaly.log_entry_id == LogEntry.id)
         .filter(LogEntry.log_file_id == log_id)
-        .order_by(Anomaly.confidence_score.desc())
-        .all()
     )
+    if severity_filter:
+        query = query.filter(Anomaly.severity.in_(severity_filter))
+    if status_filter:
+        query = query.filter(Anomaly.status.in_(status_filter))
 
-    return jsonify(
-        [
-            {
-                "id": a.id,
-                "rule_name": a.rule_name,
-                "mitre_tag": a.mitre_tag,
-                "confidence_score": a.confidence_score,
-                "explanation": a.explanation,
-                "severity": a.severity,
-                "status": a.status,
-                "detected_at": a.detected_at.isoformat() if a.detected_at else None,
-                "log_entry": _serialize_entry(e),
-            }
-            for a, e in rows
-        ]
-    )
+    # occurred_at (when the attacker was active) desc by default; confidence as
+    # a tie-breaker for anomalies that occurred at the same moment.
+    rows = query.order_by(LogEntry.timestamp.desc(), Anomaly.confidence_score.desc()).all()
+
+    return jsonify([_serialize_anomaly(a, e) for a, e in rows])
 
 
+# Group this log file's anomalies into attack chains (by source IP, then by
+# user login for leftovers) and synthesize a narrative per chain.
 @documents_bp.get("/logs/<int:log_id>/chains")
 @require_role()
 def get_chains(log_id):
@@ -204,6 +247,8 @@ def get_chains(log_id):
     if not log_file:
         return jsonify({"error": "log file not found"}), 404
 
+    # Unordered here deliberately: build_attack_chains groups by IP/login and
+    # sorts each resulting chain chronologically itself.
     rows = (
         db.query(Anomaly, LogEntry)
         .join(LogEntry, Anomaly.log_entry_id == LogEntry.id)
@@ -212,3 +257,35 @@ def get_chains(log_id):
     )
 
     return jsonify(build_attack_chains(rows))
+
+
+# Update an anomaly's triage status (new -> reviewed/dismissed) after analyst review.
+@documents_bp.patch("/anomalies/<int:anomaly_id>")
+@require_role()
+def update_anomaly_status(anomaly_id):
+    db = SessionLocal()
+    row = (
+        db.query(Anomaly, LogEntry, LogFile)
+        .join(LogEntry, Anomaly.log_entry_id == LogEntry.id)
+        .join(LogFile, LogEntry.log_file_id == LogFile.id)
+        .filter(Anomaly.id == anomaly_id)
+        .first()
+    )
+    if not row:
+        return jsonify({"error": "anomaly not found"}), 404
+
+    anomaly, entry, log_file = row
+    # Same ownership rule as _get_owned_log_file: 404 rather than 403 so a
+    # guessed id doesn't confirm the anomaly exists for another user.
+    if g.user_role != "admin" and log_file.user_id != g.user_id:
+        return jsonify({"error": "anomaly not found"}), 404
+
+    data = request.get_json(silent=True) or {}
+    status = data.get("status")
+    if status not in VALID_ANOMALY_STATUSES:
+        return jsonify({"error": f"status must be one of {sorted(VALID_ANOMALY_STATUSES)}"}), 400
+
+    anomaly.status = status
+    db.commit()
+
+    return jsonify(_serialize_anomaly(anomaly, entry))

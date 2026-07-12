@@ -1,3 +1,6 @@
+# Signup/login endpoints: creates users (bcrypt-hashed passwords, analyst
+# role) and issues JWT bearer tokens consumed by require_role() on other routers.
+
 from flask import Blueprint, jsonify, request
 
 from app.auth import create_token, hash_password, verify_password
@@ -9,10 +12,17 @@ auth_bp = Blueprint("auth", __name__)
 VALID_ROLES = {"analyst", "admin"}
 
 
+# Shape a User row into the public JSON fields returned by signup/login (no password_hash).
 def _user_payload(user: User) -> dict:
-    return {"id": user.id, "username": user.username, "email": user.email, "role": user.role}
+    return {
+        "id": user.id,
+        "username": user.username,
+        "email": user.email,
+        "role": user.role,
+    }
 
 
+# Create a new user analyst, hash their password, and return a JWT.
 @auth_bp.post("/signup")
 def signup():
     data = request.get_json(silent=True) or {}
@@ -29,11 +39,17 @@ def signup():
         return jsonify({"error": "password must be at least 8 characters"}), 400
 
     db = SessionLocal()
-    existing = db.query(User).filter((User.username == username) | (User.email == email)).first()
+    existing = (
+        db.query(User)
+        .filter((User.username == username) | (User.email == email))
+        .first()
+    )
     if existing:
         return jsonify({"error": "username or email already registered"}), 409
 
-    user = User(username=username, email=email, password_hash=hash_password(password), role=role)
+    user = User(
+        username=username, email=email, password_hash=hash_password(password), role=role
+    )
     db.add(user)
     db.commit()
 
@@ -41,6 +57,7 @@ def signup():
     return jsonify({"token": token, "user": _user_payload(user)}), 201
 
 
+# Verify username/password against the stored bcrypt hash and return a JWT.
 @auth_bp.post("/login")
 def login():
     data = request.get_json(silent=True) or {}

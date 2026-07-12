@@ -25,7 +25,7 @@ def verify_password(password: str, password_hash: str) -> bool:
 def create_token(user_id: int, role: str) -> str:
     now = datetime.now(timezone.utc)
     payload = {
-        "sub": str(user_id),
+        "sub": str(user_id),  # JWT spec requires "sub" to be a string claim
         "role": role,
         "iat": now,
         "exp": now + timedelta(minutes=Config.JWT_EXP_MINUTES),
@@ -64,10 +64,13 @@ def require_role(*roles):
             except jwt.InvalidTokenError:
                 return jsonify({"error": "Invalid token"}), 401
 
+            # Role check happens only after the token is verified, so an
+            # invalid/expired token never leaks whether the requested role would
+            # have been sufficient.
             if roles and payload.get("role") not in roles:
                 return jsonify({"error": "Insufficient permissions"}), 403
 
-            g.user_id = int(payload["sub"])
+            g.user_id = int(payload["sub"])  # cast back from the string JWT claim
             g.user_role = payload.get("role")
             return fn(*args, **kwargs)
 

@@ -39,3 +39,14 @@ rules:
       Response size exceeds the configured threshold, consistent with
       large-scale data exfiltration over an existing command channel.
     max_response_bytes: 104857600
+
+  - name: repeated_failed_login_attempts
+    mitre_tag: T1110
+    severity: low
+    description: >-
+      Elevated request volume from a single source IP (below the confirmed
+      brute-force threshold) with no successful response codes in the
+      window — worth monitoring but not confirmed compromise.
+    zscore_threshold: 1.5
+    zscore_ceiling: 2.5
+    confidence: 0.6
